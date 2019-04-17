@@ -7,7 +7,8 @@ import { connect } from 'dva';
 const { Header } = Layout;
 const mapStateToProps = state => {
   return {
-    message: state.teacher.message,
+    noticesList: state.teacher.noticesList,
+    messageList: state.teacher.messageList,
     count: state.teacher.count,
     types: state.login.types,
   };
@@ -94,7 +95,7 @@ class GlobalHeader extends Component {
         router.push('/account/center/student');
       }
       if (key === 'userInfo') {
-        router.replace('/account/setting/teacher');
+        router.replace('/account/setting/student');
       }
     }
   };
@@ -117,7 +118,7 @@ class GlobalHeader extends Component {
     </Menu>
   );
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.getUnReadCount();
   }
 
@@ -132,7 +133,7 @@ class GlobalHeader extends Component {
   };
 
   render() {
-    const { count, onNoticeClear } = this.props;
+    const { count, onNoticeClear,}  = this.props;
     const notice = (
       <NoticeIcon
         className={styles.action}
@@ -148,8 +149,26 @@ class GlobalHeader extends Component {
           emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
           showViewMore
         />
+      </NoticeIcon>
+    );
+    const stuNotice = (
+      <NoticeIcon
+        className={styles.action}
+        count={count}
+        onClear={onNoticeClear}
+        onPopupVisibleChange={this.handleChange}
+        onViewMore={() => message.info('Click on view more')}
+        clearClose
+      >
         <NoticeIcon.Tab
-          title="私信"
+          title="教务通知"
+          list={this.props.noticesList}
+          emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
+          showViewMore
+        />
+        <NoticeIcon.Tab
+          title="班级通知"
+          list={this.props.messageList}
           emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
           showViewMore
         />
@@ -165,7 +184,8 @@ class GlobalHeader extends Component {
     return (
       <Header className={styles.fixedHeader}>
         <div className={styles.drop}>
-          {localStorage.getItem('types') !== 'admin' ? notice : null}
+          {localStorage.getItem('types') === 'teacher' ? notice : null}
+          {localStorage.getItem('types') === 'stu' ? stuNotice : null}
           <Dropdown overlay={this.menu}>
             <a className="ant-dropdown-link" href="#">
               {localStorage.getItem('types') === 'teacher' ? (

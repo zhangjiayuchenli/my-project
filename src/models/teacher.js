@@ -24,8 +24,8 @@ export default {
     },
     getMessage(state, { payload }) {
       localStorage.setItem('message', JSON.stringify(payload));
-      //console.log(localStorage.getItem('message'))
-      return { ...state, ...{ message: payload } };
+
+      return { ...state, noticesList: payload.notices ,messageList:payload.message };
     },
     getCount(state, { payload }) {
       localStorage.setItem('count', payload.count);
@@ -47,7 +47,9 @@ export default {
       const url = '/dev/socket/notices';
       const { res } = yield call(teacherService.get, url);
       yield put({ type: 'getMessage', payload: res });
+      console.log('111')
       console.log(res);
+      console.log(res.notices);
     },
     //得到未读消息数量
     *getUnReadCount({ payload }, { call, put }) {
