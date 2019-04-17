@@ -1,11 +1,12 @@
 import studentService from '../service/studentService';
+
 export default {
   namespace: 'student',
   state: {},
 
   reducers: {
     getStus(state, { payload }) {
-      //sessionStorage.setItem()
+      // sessionStorage.setItem()
       return { ...state, ...{ userList: payload } };
     },
     getTotalScores(state, { payload }) {
@@ -58,15 +59,15 @@ export default {
       const { res } = yield call(studentService.deleteByCheck, url, payload);
       yield put({ type: 'getStus', payload: res });
     },
-    //统计得到每个学生每年总分
-    *getTotalScoreByYear({ payload }, { call, put }) {
-      const url = '/dev/student/selectCourseByStuId?';
+    /** 根据学生学号获得学生每学期的成绩总分(用来可视化分析-折线图) */
+    *getTotalScoreByYear(action, { call, put }) {
+      const url = '/dev/student/selectCourseByStuId';
       const { res } = yield call(studentService.get, url);
       yield put({ type: 'getTotalScores', payload: res });
     },
-    //根据学生id得到学生成绩学生信息
+    // 根据学生id得到学生成绩学生信息
     *getStuAndCourse({ payload }, { call, put }) {
-      const url = '/dev/student/selectCourseByYears?year=' + payload.year;
+      const url = `/dev/student/selectCourseByYears?year=${  payload.year}`;
       const { res } = yield call(studentService.get, url);
       yield put({ type: 'getStuAndCourses', payload: res });
     },

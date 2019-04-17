@@ -8,7 +8,7 @@ export default {
     updateAdmins(state, { payload }) {
       console.log('.......');
       console.log(payload);
-      console.log('code:' + payload.code);
+      console.log(`code:${  payload.code}`);
       return { ...state, ...{ code: payload.code } };
     },
   },

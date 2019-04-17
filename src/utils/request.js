@@ -69,7 +69,7 @@ const request = {
     return fetch(`${url}`, options)
       .then(checkStatus)
       .then(parseJSON)
-      .then(checkCode);
+      ;
   },
   get(url) {
     return fetch(url, { method: 'GET' })

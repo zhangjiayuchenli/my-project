@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Form, Button, Input } from 'antd';
 import { connect } from 'dva';
 
-const TextArea = Input.TextArea;
+const {TextArea} = Input;
 
 @connect(({ admin }) => ({
   admin,
@@ -12,23 +12,8 @@ class App extends Component {
     ws: '',
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-        const { description } = values;
-        const { sendType } = this.props;
-        const { dispatch } = this.props;
-        dispatch({
-          type: 'admin/sendMessage',
-          payload: { description, sendType },
-        });
-      }
-    });
-  };
   componentWillMount() {
-    let id = localStorage.getItem('id');
+    const id = localStorage.getItem('id');
     const wsUrl = `ws://localhost:8080/websocket/${id}`;
     let { ws } = this.state;
     if (!ws) {
@@ -55,11 +40,29 @@ class App extends Component {
       };
     }
   }
+  
+  handleSubmit = e => {
+    e.preventDefault();
+    const {form}=this.props;
+    form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+        const { description } = values;
+        const { sendType } = this.props;
+        const { dispatch } = this.props;
+        dispatch({
+          type: 'admin/sendMessage',
+          payload: { description, sendType },
+        });
+      }
+    });
+  };
+  
 
   render() {
-    const { sendType } = this.props;
+    const { sendType ,form} = this.props;
     console.log(sendType);
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator } = form;
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
         <Form.Item label="Description">

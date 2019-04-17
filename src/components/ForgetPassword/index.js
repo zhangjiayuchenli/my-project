@@ -4,30 +4,26 @@ import Link from 'umi/link';
 import { connect } from 'dva';
 import styles from './index.less';
 import ucmp from '../../assets/ucmp-logo-cloud.png';
+
 const mapStateToProps = state => {
   return {
-    list: state.login.list,
+    emailCode: state.login.emailCode,
     captchaCode: state.login.captchaCode,
     login: state.login,
   };
 };
 const mapDispatchToProps = dispatch => {
   return {
-    //向邮箱发送验证嘛
+    // 向邮箱发送验证嘛
     onSend: payload =>
       dispatch({
         type: 'login/sendCaptcha',
-        payload: payload,
-      }),
-    onValidateCaptcha: payload =>
-      dispatch({
-        type: 'login/validateCaptcha',
-        payload: payload,
+        payload,
       }),
     onUpdatePassword: payload =>
       dispatch({
         type: 'login/updatePassword',
-        payload: payload,
+        payload,
       }),
   };
 };
@@ -41,6 +37,7 @@ class ForgetForm extends Component {
     autoCompleteResult: [],
     count: 0,
   };
+
   onGetCaptcha = () => {
     let count = 59;
     this.setState({ count });
@@ -52,25 +49,26 @@ class ForgetForm extends Component {
       }
     }, 1000);
   };
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        const { captcha, email, password } = values;
-        const { captchaCode, onUpdatePassword } = this.props;
-        onUpdatePassword({ captcha, email, password });
+        const {confirm,...value}=values;
+        const {  onUpdatePassword } = this.props;
+        onUpdatePassword(value);
       }
     });
   };
 
   handleConfirmBlur = e => {
-    const value = e.target.value;
+    const {value} = e.target;
     this.setState({ confirmDirty: this.state.confirmDirty || !!value });
   };
 
   compareToFirstPassword = (rule, value, callback) => {
-    const form = this.props.form;
+    const {form} = this.props;
     if (value && value !== form.getFieldValue('password')) {
       callback('Two passwords that you enter is inconsistent!');
     } else {
@@ -79,7 +77,7 @@ class ForgetForm extends Component {
   };
 
   validateToNextPassword = (rule, value, callback) => {
-    const form = this.props.form;
+    const {form} = this.props;
     if (value && this.state.confirmDirty) {
       form.validateFields(['confirm'], { force: true });
     }
@@ -87,7 +85,7 @@ class ForgetForm extends Component {
   };
 
   handleConfirmBlur = e => {
-    const value = e.target.value;
+    const {value} = e.target;
     this.setState({ confirmDirty: this.state.confirmDirty || !!value });
   };
 
@@ -108,19 +106,24 @@ class ForgetForm extends Component {
   };
 
   componentDidUpdate = prevProps => {
-    console.log(this.props.login);
     if (prevProps.login !== this.props.login) {
-      const { list } = this.props;
-      console.log(list);
-      if (list === -1) {
+      const { emailCode,captchaCode } = this.props;
+      console.log(emailCode);
+      if (emailCode === -1) {
         alert('邮箱不存在');
       }
-      console.log(this.props.captchaCode);
-      if (this.props.captchaCode === -1) {
+      console.log(captchaCode);
+      if (captchaCode === -1) {
         alert('验证码错误');
       }
+      if(captchaCode === 0)
+      {
+        alert('修改成功')
+      }
+
     }
   };
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
@@ -170,9 +173,7 @@ class ForgetForm extends Component {
                 {getFieldDecorator('captcha', {
                   rules: [{ required: true, message: 'Please input the captcha you got!' }],
                 })(
-                  <Input
-                  //onChange={value=>this.handleChange(value)}
-                  />
+                  <Input />
                 )}
               </Col>
               <Col span={12}>

@@ -20,7 +20,7 @@ const mapDispatchToProps = dispatch => {
     onDelete: payload =>
       dispatch({
         type: 'student/deleteStu',
-        payload: payload,
+        payload,
       }),
 
     onDeleteCheck: () =>
@@ -59,6 +59,7 @@ class StudentTable extends Component {
   state = {
     searchText: '',
   };
+
   componentWillMount = () => {
     console.log('*************');
     this.props.onSubmit();

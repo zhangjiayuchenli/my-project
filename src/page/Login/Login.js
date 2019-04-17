@@ -82,7 +82,9 @@ class NormalLoginForm extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { user } = this.props;
-    if (user && user.code === '0') {
+    console.log(user)
+    if (user && user.code === 0) {
+      console.log('denglu')
       router.push('/');
     }
     return (

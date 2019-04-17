@@ -1,4 +1,5 @@
 import loginService from '../service/loginService';
+
 export default {
   namespace: 'login',
   state: {
@@ -16,7 +17,7 @@ export default {
     getEmailCaptcha(state, { payload }) {
       return {
         ...state,
-        ...{ list: payload },
+        ...{ emailCode: payload },
       };
     },
     getCaptchaCode(state, { payload }) {
@@ -26,16 +27,12 @@ export default {
       };
     },
     getCode(state, { payload }) {
-      const nextcode = payload.code;
-      if (nextcode == 0) {
+      if (payload.code === 0) {
         localStorage.setItem('user', JSON.stringify({ isLogin: true }));
         sessionStorage.setItem('user', JSON.stringify(payload.res));
-        console.log('login');
-        console.log(JSON.parse(sessionStorage.getItem('user')));
       } else {
         localStorage.setItem('user', JSON.stringify({ isLogin: false }));
       }
-      //user:payload
       return { ...state, user: payload };
     },
     changeCode(state, { payload }) {
@@ -55,15 +52,11 @@ export default {
       yield call(loginService.get, url);
     },
     *sendCaptcha({ payload }, { call, put }) {
-      const url = 'dev/sendCaptcha?email=' + payload.email;
+      const url = `dev/sendCaptcha?email=${  payload.email}`;
       const { code } = yield call(loginService.get, url);
       yield put({ type: 'getEmailCaptcha', payload: code });
     },
-    *validateCaptcha({ payload }, { call, put }) {
-      const url = 'dev/validateCaptcha?captcha=' + payload.captcha;
-      const { code } = yield call(loginService.get, url);
-      yield put({ type: 'getCaptchaCode', payload: code });
-    },
+
     *updatePassword({ payload }, { call, put }) {
       const url = 'dev/updatePassword';
       const { code } = yield call(loginService.update, url, payload);
