@@ -8,25 +8,18 @@ import { connect } from 'dva';
 import Footer from './Footer';
 const { Sider, Content } = Layout;
 // 引入子菜单组件
-const SubMenu = Menu.SubMenu;
+const {SubMenu} = Menu;
 const mapStateToProps = state => {
   return {
     types: state.login.types,
   };
 };
-@connect(mapStateToProps)
-export default class BasicLayout extends Component {
-  handleMenuCollapse = collapsed => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'global/changeLayoutCollapsed',
-      payload: collapsed,
-    });
-  };
-
+@connect(mapStateToProps) 
+class BasicLayout extends Component {
   render() {
     const { children } = this.props;
-    /*管理员模块*/
+    console.log(localStorage.getItem('types'))
+    /** 管理员模块 */
     const adminSub = (
       <Menu theme="dark" mode="inline" defaultSelectedKeys={['2']}>
         <Menu.Item key="1">
@@ -191,9 +184,9 @@ export default class BasicLayout extends Component {
             <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>{children}</div>
           </Content>
           <Footer />
-          {/*<Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>*/}
         </Layout>
       </Layout>
     );
   }
 }
+export default BasicLayout;

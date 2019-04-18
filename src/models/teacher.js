@@ -1,4 +1,5 @@
 import teacherService from '../service/teacherService';
+
 export default {
   namespace: 'teacher',
   state: {},
@@ -22,18 +23,7 @@ export default {
     getStuIdAndYearss(state, { payload }) {
       return { ...state, ...{ StuIdAndYearList2: payload } };
     },
-    getMessage(state, { payload }) {
-      localStorage.setItem('message', JSON.stringify(payload));
 
-      return { ...state, noticesList: payload.notices ,messageList:payload.message };
-    },
-    getCount(state, { payload }) {
-      localStorage.setItem('count', payload.count);
-      console.log(localStorage.getItem('count'));
-      console.log(payload);
-      console.log(payload.count);
-      return { ...state, count: payload.count };
-    },
   },
   effects: {
     *getTeacher(action, { call, put }) {
@@ -42,21 +32,7 @@ export default {
 
       yield put({ type: 'getTeachers', payload: res });
     },
-    //得到消息
-    *getMessages(action, { call, put }) {
-      const url = '/dev/socket/notices';
-      const { res } = yield call(teacherService.get, url);
-      yield put({ type: 'getMessage', payload: res });
-      console.log('111')
-      console.log(res);
-      console.log(res.notices);
-    },
-    //得到未读消息数量
-    *getUnReadCount({ payload }, { call, put }) {
-      const url = '/dev/socket/getUnReadCount?';
-      const { res } = yield call(teacherService.get, url);
-      yield put({ type: 'getCount', payload: res });
-    },
+
 
     *deleteTeacher({ payload }, { call, put }) {
       const url = '/dev/teacher/deleteByPrimaryKey';

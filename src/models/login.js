@@ -1,5 +1,5 @@
 import loginService from '../service/loginService';
-
+import router from 'umi/router';
 export default {
   namespace: 'login',
   state: {
@@ -9,11 +9,6 @@ export default {
     error: 'a',
   },
   reducers: {
-    save(state, { payload }) {
-      localStorage.setItem('id', payload.id);
-      localStorage.setItem('types', payload.types);
-      return { ...state, ...payload };
-    },
     getEmailCaptcha(state, { payload }) {
       return {
         ...state,
@@ -43,9 +38,13 @@ export default {
   effects: {
     *login({ payload }, { call, put }) {
       const url = 'dev/login';
-      const data = yield call(loginService.post, url, payload);
-      console.log(data);
-      yield put({ type: 'getCode', payload: data });
+      const response = yield call(loginService.post, url, payload);
+      yield put({ type: 'getCode', payload: response });
+      if(response.code===0)
+      {
+          sessionStorage.setItem('currentUser','true')
+          yield put(router.replace('/'))
+      }
     },
     *logout(action, { call }) {
       const url = 'dev/logout';

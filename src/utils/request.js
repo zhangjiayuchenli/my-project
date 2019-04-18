@@ -37,8 +37,6 @@ function checkStatus(response) {
 }
 
 function parseJSON(response) {
-  //debugger
-  console.log('1111111111');
   console.log(response);
   return response.json();
 }

@@ -29,33 +29,19 @@ const copyright = (
     Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品
   </Fragment>
 );
-const mapStateToProps = state => {
-  return {
-    user: state.login.user,
-    types: state.login.types,
-  };
-};
-const mapDispatchToProps = dispatch => {
-  return {
-    submitForm: payload => {
-      dispatch({
-        type: 'login/save',
-        payload,
-      });
-    },
-    validate: payload => {
-      dispatch({
-        type: 'login/login',
-        payload,
-      });
-    },
-  };
-};
-@connect(
-  mapStateToProps,
-  mapDispatchToProps
-)
+
+@connect(({login})=>({
+  login,
+}))
 class NormalLoginForm extends Component {
+
+  componentWillMount() {
+    if(sessionStorage.getItem('currentUser')==='true')
+    {
+      router.replace('/404');
+    }
+  }
+
   componentWillUpdate = () => {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user && user.isLogin === false) {
@@ -73,20 +59,21 @@ class NormalLoginForm extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        this.props.validate({ id: values.userId, password: values.password, types: values.radio });
-        this.props.submitForm({ id: values.userId, types: values.radio });
+        const {dispatch}=this.props;
+        dispatch({
+          type:'login/login',
+          payload:{ id: values.userId, password: values.password, types: values.radio }
+        })
+        localStorage.setItem('id', values.userId);
+        localStorage.setItem('types', values.radio);
+        console.log(localStorage.getItem('types'))
       }
     });
   };
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { user } = this.props;
-    console.log(user)
-    if (user && user.code === 0) {
-      console.log('denglu')
-      router.push('/');
-    }
+    // const {login:{user}} = this.props
     return (
       <div>
         <div className={styles.slick}>

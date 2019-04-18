@@ -1,61 +1,60 @@
 import React, { Component } from 'react';
 import { Menu, Dropdown, Icon, message, Layout, Avatar } from 'antd';
-import styles from './index.less';
 import router from 'umi/router';
-import NoticeIcon from '../NoticeIcon';
 import { connect } from 'dva';
+import styles from './index.less';
+import NoticeIcon from '../NoticeIcon';
+
 const { Header } = Layout;
-const mapStateToProps = state => {
-  return {
-    noticesList: state.teacher.noticesList,
-    messageList: state.teacher.messageList,
-    count: state.teacher.count,
-    types: state.login.types,
-  };
-};
-const mapDispatchToProps = dispatch => {
-  return {
-    changeCodes: payload =>
-      dispatch({
-        type: 'login/changeCode',
-        payload,
-      }),
-    // 清理后台session
-    clearSession: () =>
-      dispatch({
-        type: 'login/logout',
-      }),
-    getMessage: () =>
-      dispatch({
-        type: 'teacher/getMessages',
-      }),
-    getUnReadCount: () =>
-      dispatch({
-        type: 'teacher/getUnReadCount',
-      }),
-  };
-};
-@connect(
-  mapStateToProps,
-  mapDispatchToProps
+
+@connect(({global,login})=>({
+  global,login
+  })
 )
 class GlobalHeader extends Component {
+
+
+
+  componentDidMount() {
+    const {dispatch}=this.props;
+    dispatch({
+      type: 'global/getUnReadCount',
+    })
+  }
+
+  handleChange = e => {
+    if (e === true) {
+      const {dispatch}=this.props;
+      dispatch({
+        type: 'global/getMessages',
+      })
+      dispatch({
+        type: 'global/getUnReadCount',
+      })
+    }
+  };
+
+  handleClear=()=>{
+    const {dispatch}=this.props;
+    // 清理后台session
+    dispatch({
+      type: 'login/logout',
+    })
+    sessionStorage.clear();
+    localStorage.clear();
+  }
+
   onClick = ({ key }) => {
     /**
      *
      */
 
-    const { types } = this.props;
-
-    const { changeCodes, clearSession } = this.props;
-
+    console.log(localStorage.getItem('types'))
+    const  types = localStorage.getItem('types')
+    console.log(types)
     if (types === 'admin') {
       if (key === 'logout') {
-        changeCodes({ code: 1 });
-        clearSession();
-        sessionStorage.clear();
-        localStorage.setItem('id', '');
-        localStorage.setItem('types', '');
+        this.handleClear();
         router.replace('/login');
       }
       if (key === 'userCenter') {
@@ -67,12 +66,7 @@ class GlobalHeader extends Component {
     }
     if (types === 'teacher') {
       if (key === 'logout') {
-        console.log('退出');
-        this.props.changeCodes({ code: 1 });
-        clearSession();
-        sessionStorage.clear();
-        localStorage.removeItem('id');
-        localStorage.setItem('types', '');
+        this.handleClear();
         router.push('/login');
       }
       if (key === 'userCenter') {
@@ -84,11 +78,7 @@ class GlobalHeader extends Component {
     }
     if (types === 'stu') {
       if (key === 'logout') {
-        this.props.changeCodes({ code: 1 });
-        clearSession();
-        sessionStorage.clear();
-        localStorage.setItem('id', '');
-        localStorage.setItem('types', '');
+        this.handleClear();
         router.replace('/login');
       }
       if (key === 'userCenter') {
@@ -100,7 +90,7 @@ class GlobalHeader extends Component {
     }
   };
 
-  menu = (
+  menu= (
     <Menu onClick={this.onClick}>
       <Menu.Item key="userCenter">
         <Icon type="user" />
@@ -115,26 +105,13 @@ class GlobalHeader extends Component {
         <Icon type="logout" />
         退出登陆
       </Menu.Item>
-    </Menu>
-  );
-
-  componentDidMount() {
-    this.props.getUnReadCount();
-  }
-
-  componentDidUpdate() {
-    this.props.getUnReadCount();
-  }
-
-  handleChange = e => {
-    if (e === true) {
-      this.props.getMessage();
-    }
-  };
+    </Menu>)
+  ;
 
   render() {
-    const { count, onNoticeClear,}  = this.props;
-    const notice = (
+    console.log(localStorage.getItem('types'))
+    const { global:{noticesList,messageList,count}, onNoticeClear,}  = this.props;
+    const teaNotice = (
       <NoticeIcon
         className={styles.action}
         count={count}
@@ -145,7 +122,7 @@ class GlobalHeader extends Component {
       >
         <NoticeIcon.Tab
           title="通知"
-          list={this.props.message}
+          list={noticesList}
           emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
           showViewMore
         />
@@ -162,13 +139,13 @@ class GlobalHeader extends Component {
       >
         <NoticeIcon.Tab
           title="教务通知"
-          list={this.props.noticesList}
+          list={noticesList}
           emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
           showViewMore
         />
         <NoticeIcon.Tab
           title="班级通知"
-          list={this.props.messageList}
+          list={messageList}
           emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
           showViewMore
         />
@@ -184,7 +161,7 @@ class GlobalHeader extends Component {
     return (
       <Header className={styles.fixedHeader}>
         <div className={styles.drop}>
-          {localStorage.getItem('types') === 'teacher' ? notice : null}
+          {localStorage.getItem('types') === 'teacher' ? teaNotice : null}
           {localStorage.getItem('types') === 'stu' ? stuNotice : null}
           <Dropdown overlay={this.menu}>
             <a className="ant-dropdown-link" href="#">
@@ -194,9 +171,11 @@ class GlobalHeader extends Component {
                   size="small"
                   icon="user"
                 />
-              ) : localStorage.getItem('types') === 'admin' ? (
+              ) : null}
+              {localStorage.getItem('types') === 'admin' ? (
                 ava
-              ) : localStorage.getItem('types') === 'stu' ? (
+              ) : null}
+              {localStorage.getItem('types') === 'stu' ? (
                 <Avatar
                   src={JSON.parse(sessionStorage.getItem('user')).studentAvatar}
                   size="small"

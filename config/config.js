@@ -20,6 +20,11 @@ export default {
       path: '/forget',
       component: '../components/ForgetPassword/index',
     },
+    //exception
+    {
+      path: '/404',
+      component: '404',
+    },
     {
       path: '/',
       component: '../layout/index',
@@ -99,12 +104,11 @@ export default {
       ],
     },
   ],
-
   proxy: {
-    '/dev': {
-      target: 'http://localhost:8080',
-      changeOrigin: true,
-      pathRewrite: { '^/dev': '' },
-    },
-  },
+     '/dev': {
+       target: 'http://localhost:8080',
+       changeOrigin: true,
+       pathRewrite: { '^/dev': '' },
+     },
+   },
 };
