@@ -31,7 +31,7 @@ const copyright = (
 );
 
 @connect(({login})=>({
-  login,
+  login
 }))
 class NormalLoginForm extends Component {
 
@@ -40,6 +40,7 @@ class NormalLoginForm extends Component {
     {
       router.replace('/404');
     }
+    console.log(this.props)
   }
 
   componentWillUpdate = () => {
@@ -59,21 +60,20 @@ class NormalLoginForm extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        localStorage.setItem('types', values.radio);
+        console.log(localStorage.getItem('types'))
         const {dispatch}=this.props;
         dispatch({
           type:'login/login',
           payload:{ id: values.userId, password: values.password, types: values.radio }
         })
-        localStorage.setItem('id', values.userId);
-        localStorage.setItem('types', values.radio);
-        console.log(localStorage.getItem('types'))
+
       }
     });
   };
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    // const {login:{user}} = this.props
     return (
       <div>
         <div className={styles.slick}>

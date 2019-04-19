@@ -3,4 +3,4 @@ import Link from 'umi/link';
 
 import Exception from '@/components/Exception';
 
-export default () => <Exception type="404" linkElement={Link} />;
+export default () => <Exception type="404" linkElement={Link}  />;

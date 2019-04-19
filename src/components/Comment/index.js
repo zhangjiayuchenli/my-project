@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
-import { Form, Button, Input } from 'antd';
+import { Form, Button, Input,message } from 'antd';
 import { connect } from 'dva';
 
 const {TextArea} = Input;
 
-@connect(({ admin }) => ({
-  admin,
+@connect(({ admin ,teacher}) => ({
+  admin,teacher
 }))
 class App extends Component {
   state = {
     ws: '',
   };
 
-  componentWillMount() {
+  /*componentWillMount() {
     const id = localStorage.getItem('id');
     const wsUrl = `ws://localhost:8080/websocket/${id}`;
     let { ws } = this.state;
@@ -39,7 +39,7 @@ class App extends Component {
         console.log(e);
       };
     }
-  }
+  }*/
   
   handleSubmit = e => {
     e.preventDefault();
@@ -48,16 +48,30 @@ class App extends Component {
       if (!err) {
         console.log('Received values of form: ', values);
         const { description } = values;
-        const { sendType } = this.props;
-        const { dispatch } = this.props;
-        dispatch({
-          type: 'admin/sendMessage',
-          payload: { description, sendType },
-        });
+        const { sendType ,dispatch} = this.props;
+        const types=localStorage.getItem('types');
+        if (types==='admin')
+        {
+          dispatch({
+            type: 'admin/sendMessage',
+            payload: { description, sendType },
+          });
+        }
+        else if(types==='teacher')
+        {
+          dispatch({
+            type: 'teacher/sendMessage',
+            payload: { description },
+          });
+        }
+
       }
     });
   };
-  
+
+  success = () => {
+    message.success('发布成功');
+  };
 
   render() {
     const { sendType ,form} = this.props;
@@ -75,7 +89,7 @@ class App extends Component {
           })(<TextArea rows={4} placeholder="please enter description" />)}
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" className="login-form-button">
+          <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.success}>
             发布
           </Button>
         </Form.Item>

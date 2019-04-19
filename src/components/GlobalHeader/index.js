@@ -7,8 +7,9 @@ import NoticeIcon from '../NoticeIcon';
 
 const { Header } = Layout;
 
-@connect(({global,login})=>({
-  global,login
+@connect(({global,loading})=>({
+  global,
+  getMessages:loading.effects['global/getMessages']
   })
 )
 class GlobalHeader extends Component {
@@ -110,12 +111,13 @@ class GlobalHeader extends Component {
 
   render() {
     console.log(localStorage.getItem('types'))
-    const { global:{noticesList,messageList,count}, onNoticeClear,}  = this.props;
+    const { global:{noticesList,messageList,count}, onNoticeClear,getMessages}  = this.props;
     const teaNotice = (
       <NoticeIcon
         className={styles.action}
         count={count}
         onClear={onNoticeClear}
+        loading={getMessages}
         onPopupVisibleChange={this.handleChange}
         onViewMore={() => message.info('Click on view more')}
         clearClose
@@ -132,6 +134,7 @@ class GlobalHeader extends Component {
       <NoticeIcon
         className={styles.action}
         count={count}
+        loading={getMessages}
         onClear={onNoticeClear}
         onPopupVisibleChange={this.handleChange}
         onViewMore={() => message.info('Click on view more')}
@@ -151,7 +154,7 @@ class GlobalHeader extends Component {
         />
       </NoticeIcon>
     );
-    const ava = (
+    const adminava = (
       <Avatar
         src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
         size="small"
@@ -173,7 +176,7 @@ class GlobalHeader extends Component {
                 />
               ) : null}
               {localStorage.getItem('types') === 'admin' ? (
-                ava
+                adminava
               ) : null}
               {localStorage.getItem('types') === 'stu' ? (
                 <Avatar

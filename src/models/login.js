@@ -1,12 +1,9 @@
 import loginService from '../service/loginService';
 import router from 'umi/router';
+import { routerRedux } from 'dva/router';
 export default {
   namespace: 'login',
   state: {
-    id: '',
-    password: '',
-    types: 'a',
-    error: 'a',
   },
   reducers: {
     getEmailCaptcha(state, { payload }) {
@@ -37,13 +34,14 @@ export default {
   },
   effects: {
     *login({ payload }, { call, put }) {
+      console.log('11111111')
       const url = 'dev/login';
       const response = yield call(loginService.post, url, payload);
       yield put({ type: 'getCode', payload: response });
       if(response.code===0)
       {
           sessionStorage.setItem('currentUser','true')
-          yield put(router.replace('/'))
+          yield put(routerRedux.replace('/'))
       }
     },
     *logout(action, { call }) {

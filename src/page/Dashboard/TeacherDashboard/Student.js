@@ -17,7 +17,7 @@ const mapDispatchToProps = dispatch => {
     onSubmit: payload =>
       dispatch({
         type: 'teacher/getStuAndCourse',
-        payload: payload,
+        payload,
       }),
     onGetStuIdAndYear: payload =>
       dispatch({
@@ -60,17 +60,14 @@ class StudentTable extends Component {
   state = {
     searchText: '',
   };
-  /*componentDidUpdate=(value)=> {
-        this.props.onSubmit({id:this.props.id,year:value})
-    }*/
   componentDidMount = () => {
-    console.log('id:' + this.props.id);
-    this.props.onSubmit({ id: localStorage.getItem('id'), year: '1' });
-    this.props.onGetStuIdAndYear({ id: localStorage.getItem('id') });
+
+    this.props.onSubmit({  year: '1' });
+    this.props.onGetStuIdAndYear();
   };
 
   handleChange = value => {
-    this.props.onSubmit({ id: localStorage.getItem('id'), year: value });
+    this.props.onSubmit({  year: value });
   };
 
   getColumnSearchProps = dataIndex => ({

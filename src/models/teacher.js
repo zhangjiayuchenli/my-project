@@ -32,8 +32,10 @@ export default {
 
       yield put({ type: 'getTeachers', payload: res });
     },
-
-
+    *sendMessage({ payload }, { call }) {
+      const url = '/dev/teacher/sendMessage';
+      yield call(teacherService.insert, url, payload);
+    },
     *deleteTeacher({ payload }, { call, put }) {
       const url = '/dev/teacher/deleteByPrimaryKey';
       const { res } = yield call(teacherService.delete, url, payload);
@@ -63,7 +65,7 @@ export default {
     //获取本班学生ID及各科成绩对应学年
     *selectStuIdAndYearByTeacherId(action, { call, put }) {
       const { payload } = action;
-      const url = '/dev/teacher/selectStuIdAndYearByTeacherId?id=' + payload.id;
+      const url = '/dev/teacher/selectStuIdAndYearByTeacherId';
       const { res } = yield call(teacherService.get, url);
       console.log(res);
       yield put({ type: 'getStuIdAndYear', payload: res });
@@ -71,14 +73,14 @@ export default {
     //获取本班学生及各科成绩
     *getStuAndCourse(action, { call, put }) {
       const { payload } = action;
-      const url = '/dev/teacher/selectCourseByYears?year=' + payload.year + '&id=' + payload.id;
+      const url = `/dev/teacher/selectCourseByYears?year=${  payload.year  }`;
       const { res } = yield call(teacherService.get, url);
       yield put({ type: 'getStuAndCourses', payload: res });
     },
     //得到统计及格人数数据
     *getStatistic(action, { call, put }) {
       const { payload } = action;
-      const url = '/dev/teacher/Statistics?year=' + payload.year + '&id=' + payload.id;
+      const url = `/dev/teacher/Statistics?year=${  payload.year  }&id=${  payload.id}`;
       const { res } = yield call(teacherService.get, url);
       console.log(res);
       yield put({ type: 'getStatistics', payload: res });
@@ -88,10 +90,10 @@ export default {
     *getTotalScoreByYear(action, { call, put }) {
       const { payload } = action;
       const url =
-        '/dev/teacher/selectSumCourseByYear?teacherId=' +
-        payload.teacherId +
-        '&text=' +
-        payload.text;
+        `/dev/teacher/selectSumCourseByYear?teacherId=${ 
+        payload.teacherId 
+        }&text=${ 
+        payload.text}`;
       const { res } = yield call(teacherService.get, url);
       console.log(res);
       yield put({ type: 'getTotalScores', payload: res });
@@ -129,7 +131,7 @@ export default {
       console.log('qqqqqqaq');
       console.log(payload.studentId);
       console.log('qqqqqqaq');
-      const url = '/dev/teacher/getStuOfYear?studentId=' + payload.studentId;
+      const url = `/dev/teacher/getStuOfYear?studentId=${  payload.studentId}`;
       const { res } = yield call(teacherService.get, url);
       console.log(res);
       yield put({ type: 'getStuIdAndYearss', payload: res });
