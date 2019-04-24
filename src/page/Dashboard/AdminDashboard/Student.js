@@ -142,10 +142,7 @@ class StudentTable extends Component {
         sorter: (a, b) => a.studentName.length - b.studentName.length,
         sortDirections: ['descend'],
       },
-      {
-        title: 'Password',
-        dataIndex: 'studentPassword',
-      },
+
       {
         title: 'Class',
         dataIndex: 'teacherClassname',
@@ -213,8 +210,8 @@ class StudentTable extends Component {
         <Table
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={this.props.userList}
-          rowKey={record => record.id}
+          dataSource={this.props.userList}rowKey={record => record.id}
+
           scroll={{ x: 1300 }}
         />
       </div>

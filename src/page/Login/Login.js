@@ -26,7 +26,7 @@ const links = [
 
 const copyright = (
   <Fragment>
-    Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品
+    Copyright <Icon type="copyright" /> 2018 qaq体验技术部出品
   </Fragment>
 );
 
@@ -61,6 +61,7 @@ class NormalLoginForm extends Component {
       if (!err) {
         console.log('Received values of form: ', values);
         localStorage.setItem('types', values.radio);
+        sessionStorage.setItem('currentUser','false')
         console.log(localStorage.getItem('types'))
         const {dispatch}=this.props;
         dispatch({

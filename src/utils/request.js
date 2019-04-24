@@ -1,6 +1,6 @@
 import fetch from 'dva/fetch';
 import { notification } from 'antd';
-const BASE_URL = 'dev';
+const BASE_URL = '/api';
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -53,24 +53,28 @@ function checkCode(response) {
 }
 const request = {
   fetch(method, url, body) {
-    let options = {
-      method: method,
+    const options = {
+      method,
       headers: new Headers({
         'Content-Type': 'application/json',
       }),
     };
     if (body) {
-      //debugger
       options.body = JSON.stringify(body);
       console.log(options.body);
+      if(localStorage.getItem('token'))
+      {
+        options.headers.append('token',localStorage.getItem('token'))
+
+      }
     }
-    return fetch(`${url}`, options)
+    return fetch(`${BASE_URL}${url}`, options)
       .then(checkStatus)
       .then(parseJSON)
       ;
   },
   get(url) {
-    return fetch(url, { method: 'GET' })
+    return fetch(`${BASE_URL}${url}`, { method: 'GET' })
       .then(response => {
         console.log(response);
         return response.json();

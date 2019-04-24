@@ -8,7 +8,9 @@ import moment from 'moment';
 const { Option } = Select;
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    currentUser: state.global.currentUser
+  };
 };
 const mapDispatchToProps = dispatch => {
   return {
@@ -65,6 +67,7 @@ class RegistrationForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    console.log(this.props.currentUser)
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -115,7 +118,7 @@ class RegistrationForm extends Component {
             </Form.Item>
             <Form.Item label="密码">
               {getFieldDecorator('studentPassword', {
-                initialValue: studentPassword,
+
                 rules: [
                   {
                     message: 'Please input your password!',
@@ -128,7 +131,7 @@ class RegistrationForm extends Component {
             </Form.Item>
             <Form.Item label="确认密码">
               {getFieldDecorator('confirm', {
-                initialValue: studentPassword,
+
                 rules: [
                   {
                     message: 'Please confirm your password!',

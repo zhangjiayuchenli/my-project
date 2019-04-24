@@ -6,7 +6,13 @@ export default {
         // 这里暂时还没有添加配置，该插件还不会有作用，我们会在后面的课程按照需求打开相应的配置
         antd: true,
         dva: true,
+        locale: {
+          enable: true, // default false
+          default: 'zh-CN', // default zh-CN
+          baseNavigator: true, // default true, when it is true, will use `navigator.language` overwrite default
+        },
       },
+
     ],
   ],
   routes: [
@@ -29,7 +35,7 @@ export default {
       path: '/',
       component: '../layout/index',
       routes: [
-        { path: '/', redirect: '/helloworld' },
+        { path: '/', redirect: '/login' },
 
         {
           path: '/helloworld',
@@ -95,6 +101,26 @@ export default {
                 { path: '/account/setting/student', component: 'Account/Setting/StudentSetting' },
               ],
             },
+            {
+              path: '/account/settings',
+              name: 'settings',
+              component: './Account/Setting/StuSetting/Info',
+              routes: [
+                {
+                  path: '/account/settings',
+                  redirect: '/account/settings/base',
+                },
+                {
+                  path: '/account/settings/base',
+                  component: './Account/Setting/StuSetting/BaseView',
+                },
+                {
+                  path: '/account/settings/security',
+                  component: './Account/Setting/StuSetting/SecurityView',
+                },
+
+              ],
+            },
             { component: '404' },
           ],
         },
@@ -105,10 +131,10 @@ export default {
     },
   ],
   proxy: {
-     '/dev': {
+     '/api': {
        target: 'http://localhost:8080',
        changeOrigin: true,
-       pathRewrite: { '^/dev': '' },
+       pathRewrite: { '^/api': '' },
      },
    },
 };

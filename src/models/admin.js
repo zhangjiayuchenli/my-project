@@ -14,12 +14,12 @@ export default {
   },
   effects: {
     *updateAdmin({ payload }, { call, put }) {
-      const url = '/dev/admin/updateAdmin';
+      const url = '/admin/updateAdmin';
       const data = yield call(adminService.update, url, payload);
       yield put({ type: 'updateAdmins', payload: data });
     },
     *sendMessage({ payload }, { call }) {
-      const url = '/dev/admin/sendMessage';
+      const url = '/admin/sendMessage';
       yield call(adminService.insert, url, payload);
     },
   },

@@ -233,8 +233,8 @@ class StudentTable extends Component {
           onChange={this.handleChange}
           defaultValue="1"
           style={{ width: '20%' }}
-          allowClear={true}
-          showSearch={true}
+          allowClear
+          showSearch
         >
           <Option key="1">第一学期</Option>
           <Option key="2">第二学期</Option>

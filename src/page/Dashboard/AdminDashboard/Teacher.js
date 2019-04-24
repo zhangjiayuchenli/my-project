@@ -132,10 +132,7 @@ class TeacherTable extends Component {
         sorter: (a, b) => a.teacherName.length - b.teacherName.length,
         sortDirections: ['descend'],
       },
-      {
-        title: 'Password',
-        dataIndex: 'teacherPassword',
-      },
+
       {
         title: 'Sex',
         dataIndex: 'teacherSex',

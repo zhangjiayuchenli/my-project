@@ -1,16 +1,30 @@
 import React, { Component } from 'react';
 import { Layout, Menu, Icon } from 'antd';
 import Link from 'umi/link';
+import { connect } from 'dva';
 import Logo from '../components/Logo';
 import Header from './Header';
 import styles from './index.less';
-import { connect } from 'dva';
 import Footer from './Footer';
+
 const { Sider, Content } = Layout;
 // 引入子菜单组件
 const {SubMenu} = Menu;
 
+@connect(({global})=>({
+  global
+}))
 class BasicLayout extends Component {
+  componentDidMount() {
+    const {dispatch}=this.props;
+    console.log('1111')
+    dispatch({
+          type:'global/fetchCurrent'
+    })
+  }
+
+
+
   render() {
     const { children } = this.props;
     /** 管理员模块 */
@@ -165,6 +179,9 @@ class BasicLayout extends Component {
           </Menu.Item>
           <Menu.Item key="3">
             <Link to="/account/setting/student">修改信息</Link>
+          </Menu.Item>
+          <Menu.Item key="4">
+            <Link to="/account/settings">修改信息2.0</Link>
           </Menu.Item>
         </SubMenu>
       </Menu>

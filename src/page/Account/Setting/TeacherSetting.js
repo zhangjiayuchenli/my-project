@@ -118,7 +118,7 @@ class RegistrationForm extends Component {
             </Form.Item>
             <Form.Item label="密码">
               {getFieldDecorator('teacherPassword', {
-                initialValue: teacherPassword,
+
                 rules: [
                   {
                     message: 'Please input your password!',
@@ -131,7 +131,6 @@ class RegistrationForm extends Component {
             </Form.Item>
             <Form.Item label="确认密码">
               {getFieldDecorator('confirm', {
-                initialValue: teacherPassword,
                 rules: [
                   {
                     message: 'Please confirm your password!',
@@ -201,13 +200,14 @@ class RegistrationForm extends Component {
           <br />
           <Upload
             name="file"
-            action="/dev/teacher/uploadAvatar"
+            action="/api/teacher/uploadAvatar"
             onChange={info => {
               if (info.file.status !== 'uploading') {
                 console.log(info.file, info.fileList);
               }
               if (info.file.status === 'done') {
                 this.setState({ teacherAvatar: info.file.response.res });
+                console.log(info.file.response.res )
                 message.success(`${info.file.name} file uploaded successfully`);
               } else if (info.file.status === 'error') {
                 message.error(`${info.file.name} file upload failed.`);

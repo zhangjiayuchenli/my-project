@@ -34,7 +34,7 @@ const mapDispatchToProps = dispatch => {
     changeCodes: payload =>
       dispatch({
         type: 'login/changeCode',
-        payload: payload,
+        payload,
       }),
   };
 };

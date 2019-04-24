@@ -1,6 +1,6 @@
-import loginService from '../service/loginService';
-import router from 'umi/router';
 import { routerRedux } from 'dva/router';
+import loginService from '../service/loginService';
+
 export default {
   namespace: 'login',
   state: {
@@ -25,7 +25,7 @@ export default {
       } else {
         localStorage.setItem('user', JSON.stringify({ isLogin: false }));
       }
-      return { ...state, user: payload };
+      return { ...state, ...{currentUser: payload.res} };
     },
     changeCode(state, { payload }) {
       console.log(payload);
@@ -34,28 +34,44 @@ export default {
   },
   effects: {
     *login({ payload }, { call, put }) {
-      console.log('11111111')
-      const url = 'dev/login';
+      const url = '/login';
       const response = yield call(loginService.post, url, payload);
       yield put({ type: 'getCode', payload: response });
+      console.log(response)
+      console.log(response.res)
+      console.log(response.token)
       if(response.code===0)
       {
+          localStorage.setItem('token',response.token);
+          const types=localStorage.getItem('types');
           sessionStorage.setItem('currentUser','true')
-          yield put(routerRedux.replace('/'))
+          if(types==='admin')
+          {
+            yield put(routerRedux.replace('/dashboard/admin/student'))
+          }
+        else if(types==='teacher')
+        {
+          yield put(routerRedux.replace('/dashboard/teacher/student'))
+        }
+        else if(types==='stu')
+        {
+          yield put(routerRedux.replace('/dashboard/student/studentInfo'))
+        }
+
       }
     },
     *logout(action, { call }) {
-      const url = 'dev/logout';
+      const url = '/logout';
       yield call(loginService.get, url);
     },
     *sendCaptcha({ payload }, { call, put }) {
-      const url = `dev/sendCaptcha?email=${  payload.email}`;
+      const url = `/sendCaptcha?email=${  payload.email}`;
       const { code } = yield call(loginService.get, url);
       yield put({ type: 'getEmailCaptcha', payload: code });
     },
 
     *updatePassword({ payload }, { call, put }) {
-      const url = 'dev/updatePassword';
+      const url = '/updatePassword';
       const { code } = yield call(loginService.update, url, payload);
       yield put({ type: 'getCaptchaCode', payload: code });
     },

@@ -4,23 +4,27 @@ import router from 'umi/router';
 import { connect } from 'dva';
 import styles from './index.less';
 import NoticeIcon from '../NoticeIcon';
+import SelectLang from '../SelectLang';
 
 const { Header } = Layout;
 
 @connect(({global,loading})=>({
   global,
-  getMessages:loading.effects['global/getMessages']
+  getMessages:loading.effects['global/getMessages'],
+  currentUser:global.currentUser
   })
 )
 class GlobalHeader extends Component {
 
-
-
   componentDidMount() {
     const {dispatch}=this.props;
-    dispatch({
-      type: 'global/getUnReadCount',
-    })
+    if(localStorage.getItem("types")!=='admin')
+    {
+      dispatch({
+        type: 'global/getUnReadCount',
+      })
+    }
+
   }
 
   handleChange = e => {
@@ -111,7 +115,8 @@ class GlobalHeader extends Component {
 
   render() {
     console.log(localStorage.getItem('types'))
-    const { global:{noticesList,messageList,count}, onNoticeClear,getMessages}  = this.props;
+
+    const { global:{noticesList,messageList,count}, onNoticeClear,getMessages,currentUser}  = this.props;
     const teaNotice = (
       <NoticeIcon
         className={styles.action}
@@ -123,7 +128,7 @@ class GlobalHeader extends Component {
         clearClose
       >
         <NoticeIcon.Tab
-          title="通知"
+          title="教务通知"
           list={noticesList}
           emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
           showViewMore
@@ -145,6 +150,7 @@ class GlobalHeader extends Component {
           list={noticesList}
           emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
           showViewMore
+
         />
         <NoticeIcon.Tab
           title="班级通知"
@@ -170,7 +176,7 @@ class GlobalHeader extends Component {
             <a className="ant-dropdown-link" href="#">
               {localStorage.getItem('types') === 'teacher' ? (
                 <Avatar
-                  src={JSON.parse(sessionStorage.getItem('user')).teacherAvatar}
+                  src={currentUser.teacherAvatar}
                   size="small"
                   icon="user"
                 />
@@ -180,7 +186,7 @@ class GlobalHeader extends Component {
               ) : null}
               {localStorage.getItem('types') === 'stu' ? (
                 <Avatar
-                  src={JSON.parse(sessionStorage.getItem('user')).studentAvatar}
+                  src={currentUser.studentAvatar}
                   size="small"
                   icon="user"
                 />
@@ -188,6 +194,7 @@ class GlobalHeader extends Component {
               <span>here</span>
             </a>
           </Dropdown>
+          <SelectLang className={styles.action} />
         </div>
       </Header>
     );

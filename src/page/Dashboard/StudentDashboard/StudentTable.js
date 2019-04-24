@@ -23,7 +23,7 @@ const mapDispatchToProps = dispatch => {
   mapStateToProps,
   mapDispatchToProps
 )
-export default class StudentTable extends Component {
+ class StudentTable extends Component {
   componentDidMount = () => {
     this.props.onSubmit({ year: '1' });
   };
@@ -78,13 +78,13 @@ export default class StudentTable extends Component {
         <Table
           pagination={false}
           columns={columns}
-          //rowKey={record => record.id}
+          rowKey={"1"}
           dataSource={[stuList]}
           title={() => '学生成绩'}
         />
         <Table
           columns={columns2}
-          //rowKey={record => record.id}
+          rowKey={"1"}
           dataSource={[stuList]}
           pagination={false}
         />
@@ -92,3 +92,4 @@ export default class StudentTable extends Component {
     );
   }
 }
+export default  StudentTable;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Divider, Tag, Upload, message, Button, Icon, Row, Col } from 'antd';
+import { Card, Divider, Tag, Upload, message, Button, Icon, Row, Col ,Avatar} from 'antd';
 import { connect } from 'dva';
 import styles from './StudentCenter.less';
 const mapStateToProps = state => {
@@ -28,11 +28,7 @@ export default class studentCenter extends Component {
           <Card bordered={false} style={{ marginBottom: 24 }}>
             <div className={styles.main}>
               <div className={styles.avatarHolder}>
-                <img
-                  alt=""
-                  src={this.state.studentAvatar}
-                  style={{ width: '100px', height: '100px', borderRadius: '32px' }}
-                />
+                <Avatar src={this.state.studentAvatar}/>
                 <div className={styles.name}>{this.state.studentName}</div>
                 <div>好好学习，天天向上</div>
               </div>

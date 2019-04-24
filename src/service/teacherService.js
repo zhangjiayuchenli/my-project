@@ -1,5 +1,5 @@
-import fetch from 'dva/fetch';
 import request from '../utils/request';
+
 const teacherService = {
   delete(url, { id }) {
     return request.delete(url, { id });
