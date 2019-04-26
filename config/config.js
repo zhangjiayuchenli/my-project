@@ -81,6 +81,7 @@ export default {
           name: 'account',
           path: '/account',
           routes: [
+            //center
             {
               name: 'account/center',
               path: '/account/center',
@@ -91,16 +92,29 @@ export default {
                 { path: '/account/center/student', component: 'Account/Center/StudentCenter' },
               ],
             },
+            // teacher
             {
-              name: 'account/setting',
+
               path: '/account/setting',
-              //component:'./Account/Setting/AdminSetting',
+              name: 'setting',
+              component: './Account/Setting/TeaSetting/Info',
               routes: [
-                { path: '/account/setting/admin', component: 'Account/Setting/AdminSetting' },
-                { path: '/account/setting/teacher', component: 'Account/Setting/TeacherSetting' },
-                { path: '/account/setting/student', component: 'Account/Setting/StudentSetting' },
+                {
+                  path: '/account/setting',
+                  redirect: '/account/setting/base',
+                },
+                {
+                  path: '/account/setting/base',
+                  component: './Account/Setting/TeaSetting/BaseView',
+                },
+                {
+                  path: '/account/setting/security',
+                  component: './Account/Setting/TeaSetting/SecurityView',
+                },
+
               ],
             },
+            // stu
             {
               path: '/account/settings',
               name: 'settings',
@@ -120,6 +134,13 @@ export default {
                 },
 
               ],
+            },
+            // admin
+            {
+              path: '/account/adminSettings',
+              name: 'settings',
+              component: './Account/Setting/AdminSetting',
+
             },
             { component: '404' },
           ],

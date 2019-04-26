@@ -21,7 +21,7 @@ class AvatarView extends Component {
         </div>
         <Upload
           name="file"
-          action="/api/student/uploadAvatar"
+          action={localStorage.getItem("types")==='teacher'?"/api/teacher/uploadAvatar":"/api/student/uploadAvatar"}
           onChange={info => {
             if (info.file.status !== 'uploading') {
               console.log(info.file, info.fileList);

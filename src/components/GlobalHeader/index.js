@@ -3,6 +3,7 @@ import { Menu, Dropdown, Icon, message, Layout, Avatar } from 'antd';
 import router from 'umi/router';
 import { connect } from 'dva';
 import styles from './index.less';
+import HeaderDropdown from '../HeaderDropdown';
 import NoticeIcon from '../NoticeIcon';
 import SelectLang from '../SelectLang';
 
@@ -50,13 +51,7 @@ class GlobalHeader extends Component {
   }
 
   onClick = ({ key }) => {
-    /**
-     *
-     */
-
-    console.log(localStorage.getItem('types'))
     const  types = localStorage.getItem('types')
-    console.log(types)
     if (types === 'admin') {
       if (key === 'logout') {
         this.handleClear();
@@ -95,28 +90,27 @@ class GlobalHeader extends Component {
     }
   };
 
-  menu= (
-    <Menu onClick={this.onClick}>
-      <Menu.Item key="userCenter">
-        <Icon type="user" />
-        个人中心
-      </Menu.Item>
-      <Menu.Item key="userInfo">
-        <Icon type="setting" />
-        修改密码
-      </Menu.Item>
-      <Menu.Divider />
-      <Menu.Item key="logout">
-        <Icon type="logout" />
-        退出登陆
-      </Menu.Item>
-    </Menu>)
-  ;
-
   render() {
     console.log(localStorage.getItem('types'))
-
     const { global:{noticesList,messageList,count}, onNoticeClear,getMessages,currentUser}  = this.props;
+    console.log(currentUser)
+    const menu= (
+      <Menu onClick={this.onClick}>
+        <Menu.Item key="userCenter">
+          <Icon type="user" />
+          个人中心
+        </Menu.Item>
+        <Menu.Item key="userInfo">
+          <Icon type="setting" />
+          修改密码
+        </Menu.Item>
+        <Menu.Divider />
+        <Menu.Item key="logout">
+          <Icon type="logout" />
+          退出登陆
+        </Menu.Item>
+      </Menu>)
+    ;
     const teaNotice = (
       <NoticeIcon
         className={styles.action}
@@ -172,14 +166,15 @@ class GlobalHeader extends Component {
         <div className={styles.drop}>
           {localStorage.getItem('types') === 'teacher' ? teaNotice : null}
           {localStorage.getItem('types') === 'stu' ? stuNotice : null}
-          <Dropdown overlay={this.menu}>
-            <a className="ant-dropdown-link" href="#">
+          <HeaderDropdown overlay={menu}>
+            <span className={`${styles.action} ${styles.account}`}>
               {localStorage.getItem('types') === 'teacher' ? (
                 <Avatar
                   src={currentUser.teacherAvatar}
                   size="small"
                   icon="user"
                 />
+
               ) : null}
               {localStorage.getItem('types') === 'admin' ? (
                 adminava
@@ -191,9 +186,18 @@ class GlobalHeader extends Component {
                   icon="user"
                 />
               ) : null}
-              <span>here</span>
-            </a>
-          </Dropdown>
+              {localStorage.getItem('types') === 'teacher' ? (
+                <span>{currentUser.teacherName}</span>
+              ) : null}
+              {localStorage.getItem('types') === 'admin' ? (
+                <span>{currentUser.name}</span>
+              ) : null}
+              {localStorage.getItem('types') === 'stu' ? (
+                <span>{currentUser.studentName}</span>
+              ) : null}
+
+            </span>
+          </HeaderDropdown>
           <SelectLang className={styles.action} />
         </div>
       </Header>

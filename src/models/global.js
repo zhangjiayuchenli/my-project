@@ -48,7 +48,17 @@ export default {
         type: 'saveCurrentUser',
         payload: response,
       });
-    }
+    },
+    *fetchCurrentByToken(_,{call,put}){
+      const url='/fetchCurrentUserByToken'
+      const response=yield call(globalService.get,url)
+      console.log(response)
+      yield put({
+        type: 'saveCurrentUser',
+        payload: response,
+      });
+    },
+
 
   },
 };

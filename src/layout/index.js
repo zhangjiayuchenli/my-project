@@ -12,7 +12,8 @@ const { Sider, Content } = Layout;
 const {SubMenu} = Menu;
 
 @connect(({global})=>({
-  global
+  global,
+  currentUser:global.currentUser
 }))
 class BasicLayout extends Component {
   componentDidMount() {
@@ -82,7 +83,7 @@ class BasicLayout extends Component {
             <Link to="/account/center/admin">个人信息</Link>
           </Menu.Item>
           <Menu.Item key="3">
-            <Link to="/account/setting/admin">修改信息</Link>
+            <Link to="/account/adminSettings">修改信息</Link>
           </Menu.Item>
         </SubMenu>
       </Menu>
@@ -139,6 +140,9 @@ class BasicLayout extends Component {
           </Menu.Item>
           <Menu.Item key="3">
             <Link to="/account/setting/teacher">修改信息</Link>
+          </Menu.Item>
+          <Menu.Item key="4">
+            <Link to="/account/setting">修改信息2.0</Link>
           </Menu.Item>
         </SubMenu>
       </Menu>

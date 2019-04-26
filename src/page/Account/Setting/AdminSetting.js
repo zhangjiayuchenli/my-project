@@ -4,20 +4,12 @@ import {
   Input,
   Tooltip,
   Icon,
-  Cascader,
-  Select,
-  Row,
-  Col,
-  Checkbox,
   Button,
-  AutoComplete,
 } from 'antd';
-import styles from './AdminSetting.less';
 import { connect } from 'dva';
 import router from 'umi/router';
-const FormItem = Form.Item;
-const { Option } = Select;
-const AutoCompleteOption = AutoComplete.Option;
+import styles from './AdminSetting.less';
+
 const mapStateToProps = state => {
   return {
     id: state.login.id,

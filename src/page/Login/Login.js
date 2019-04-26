@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Form, Icon, Input, Button, Checkbox, Radio, Carousel } from 'antd';
 import { connect } from 'dva';
 import router from 'umi/router';
+import { routerRedux } from 'dva/router';
 import Logo from '../../components/Logo';
 import styles from './Login.less';
 import GlobalFooter from '../../components/GlobalFooter';
@@ -30,8 +31,9 @@ const copyright = (
   </Fragment>
 );
 
-@connect(({login})=>({
-  login
+@connect(({login,global})=>({
+  login,global
+
 }))
 class NormalLoginForm extends Component {
 
@@ -43,6 +45,21 @@ class NormalLoginForm extends Component {
     console.log(this.props)
   }
 
+  componentDidMount() {
+    const { global: { currentUser }, dispatch } = this.props;
+    const token = localStorage.getItem('token');
+    console.log(token)
+    if (!!token) {
+      console.log("***")
+      if (!currentUser.id) {
+        console.log("1123456")
+        dispatch({
+          type: 'global/fetchCurrentByToken'
+        })
+      }
+    }
+  }
+
   componentWillUpdate = () => {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user && user.isLogin === false) {
@@ -50,6 +67,38 @@ class NormalLoginForm extends Component {
       localStorage.removeItem('user');
     }
   };
+
+  componentDidUpdate(prevProps) {
+    const {global:{currentUser},dispatch}=this.props;
+
+    if(prevProps.global.currentUser!==currentUser)
+    {
+      const types=localStorage.getItem('types');
+      sessionStorage.setItem('currentUser','true')
+      console.log(types)
+      if(types==='admin')
+      {
+        router.replace('/dashboard/admin/student')
+        return
+      }
+      if(types==='teacher')
+      {
+        console.log("++++++")
+        router.replace('/dashboard/teacher/student')
+        return
+      }
+      if(types==='stu')
+      {
+        router.replace('/dashboard/student/studentInfo')
+        return
+      }
+    }
+      if(!!currentUser)
+      {
+        return ;
+      }
+    }
+
 
   handleClick = () => {
     router.push('/forget');

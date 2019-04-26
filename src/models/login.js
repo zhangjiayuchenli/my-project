@@ -37,9 +37,6 @@ export default {
       const url = '/login';
       const response = yield call(loginService.post, url, payload);
       yield put({ type: 'getCode', payload: response });
-      console.log(response)
-      console.log(response.res)
-      console.log(response.token)
       if(response.code===0)
       {
           localStorage.setItem('token',response.token);

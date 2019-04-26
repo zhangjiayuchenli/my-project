@@ -4,8 +4,8 @@ import { Form,Input,Button} from 'antd';
 import { connect } from 'dva';
 import styles from './SecurityView.less';
 
-@connect(({student})=>({
-  student
+@connect(({teacher})=>({
+  teacher
 }))
 @Form.create()
 class SecurityView extends Component {
@@ -31,7 +31,7 @@ class SecurityView extends Component {
         console.log('Received values of form: ', values);
         const { confirm, ...value } = values;
         dispatch({
-          type:'student/updateStu',
+          type:'teacher/updateTeacher',
           payload: value,
         })
       }
@@ -45,7 +45,7 @@ class SecurityView extends Component {
 
   compareToFirstPassword = (rule, value, callback) => {
     const form = this.props.form;
-    if (value && value !== form.getFieldValue('studentPassword')) {
+    if (value && value !== form.getFieldValue('teacherPassword')) {
       callback('Two passwords that you enter is inconsistent!');
     } else {
       callback();
@@ -67,7 +67,7 @@ class SecurityView extends Component {
         <div className={styles.left}>
           <Form layout="vertical" onSubmit={this.handleSubmit} hideRequiredMark>
             <Form.Item label="密码">
-              {getFieldDecorator('studentPassword', {
+              {getFieldDecorator('teacherPassword', {
                 rules: [
                   {
                     required: true,

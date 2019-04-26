@@ -19,22 +19,20 @@ class BaseView extends Component {
     this.setBaseInfo();
   }
 
-
-
   setBaseInfo = () => {
     const { currentUser, form } = this.props;
     Object.keys(form.getFieldsValue()).forEach(key => {
       const obj = {};
       obj[key] = currentUser[key] || null;
-      obj.studentBirthday = moment(obj.studentBirthday);
+      obj.teacherBrithday = moment(obj.teacherBrithday);
       form.setFieldsValue(obj);
     });
   };
 
   getAvatarURL() {
     const { currentUser } = this.props;
-    if (currentUser.studentAvatar) {
-      return currentUser.studentAvatar;
+    if (currentUser.teacherAvatar) {
+      return currentUser.teacherAvatar;
     }
     const url = 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png';
     return url;
@@ -47,7 +45,7 @@ class BaseView extends Component {
       if (!err) {
         console.log('Received values of form: ', values);
         dispatch({
-          type:'student/updateStu',
+          type:'teacher/updateStu',
           payload: values,
         })
 
@@ -72,7 +70,7 @@ class BaseView extends Component {
         <div className={styles.left}>
           <Form layout="vertical" onSubmit={this.handleSubmit} hideRequiredMark>
             <FormItem label={formatMessage({ id: 'app.settings.basic.email' })}>
-              {getFieldDecorator('studentEmail', {
+              {getFieldDecorator('teacherEmail', {
                 rules: [
                   {
                     required: true,
@@ -82,7 +80,7 @@ class BaseView extends Component {
               })(<Input />)}
             </FormItem>
             <FormItem label={formatMessage({ id: 'app.settings.basic.nickname' })}>
-              {getFieldDecorator('studentName', {
+              {getFieldDecorator('teacherName', {
                 rules: [
                   {
                     required: true,
@@ -92,7 +90,7 @@ class BaseView extends Component {
               })(<Input />)}
             </FormItem>
             <FormItem label={formatMessage({ id: 'app.settings.basic.sex' })}>
-              {getFieldDecorator('studentSex', {
+              {getFieldDecorator('teacherSex', {
                 rules: [
                   {
                     required: true,
@@ -107,7 +105,7 @@ class BaseView extends Component {
               )}
             </FormItem>
             <FormItem label={formatMessage({ id: 'app.settings.basic.phone' })}>
-              {getFieldDecorator('studentPhone', {
+              {getFieldDecorator('teacherPhone', {
                 rules: [
                   {
                     required: true,
@@ -117,7 +115,7 @@ class BaseView extends Component {
               })(<Input />)}
             </FormItem>
             <FormItem label={formatMessage({ id: 'app.settings.basic.address' })}>
-              {getFieldDecorator('studentAddress', {
+              {getFieldDecorator('teacherAddress', {
                 rules: [
                   {
                     required: true,
@@ -127,7 +125,7 @@ class BaseView extends Component {
               })(<Input />)}
             </FormItem>
             <FormItem label={formatMessage({ id: 'app.settings.basic.birthday' })}>
-              {getFieldDecorator('studentBirthday', {
+              {getFieldDecorator('teacherBrithday', {
                 rules: [
                   {
                     required: true,

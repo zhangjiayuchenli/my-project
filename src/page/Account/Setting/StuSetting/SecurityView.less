@@ -1,0 +1,29 @@
+@import '~antd/lib/style/themes/default.less';
+
+.SecurityView {
+  display: flex;
+  padding-top: 12px;
+
+  .left {
+    min-width: 224px;
+    max-width: 448px;
+  }
+
+}
+
+@media screen and (max-width: @screen-xl) {
+  .baseView {
+    flex-direction: column-reverse;
+
+    .right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 448px;
+      padding: 20px;
+      .avatar_title {
+        display: none;
+      }
+    }
+  }
+}

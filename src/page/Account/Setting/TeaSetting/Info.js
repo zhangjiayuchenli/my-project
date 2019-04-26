@@ -60,7 +60,7 @@ class Info extends Component {
   };
 
   selectKey = ({ key }) => {
-    router.push(`/account/settings/${key}`);
+    router.push(`/account/setting/${key}`);
     this.setState({
       selectKey: key,
     });
@@ -91,6 +91,8 @@ class Info extends Component {
     if (!currentUser.id) {
         return '';
       }
+
+
     const { mode, selectKey } = this.state;
     return (
 
