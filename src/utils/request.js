@@ -62,11 +62,12 @@ const request = {
     if (body) {
       options.body = JSON.stringify(body);
       console.log(options.body);
-      if(localStorage.getItem('token'))
-      {
-        options.headers.append('token',localStorage.getItem('token'))
 
-      }
+    }
+    const token = localStorage.getItem("token");
+    if(!!token)
+    {
+      options.headers.append('token',localStorage.getItem('token'))
     }
     return fetch(`${BASE_URL}${url}`, options)
       .then(checkStatus)
@@ -74,18 +75,7 @@ const request = {
       ;
   },
   get(url) {
-    return fetch(`${BASE_URL}${url}`, { method: 'GET' })
-      .then(response => {
-        console.log(response);
-        return response.json();
-      })
-      .then(data => {
-        return data;
-      })
-      .catch(e => {
-        console.log(e);
-        console.log('************');
-      });
+    return this.fetch('get', url);
   },
 
   post(url, payload) {

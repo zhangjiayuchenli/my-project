@@ -45,7 +45,7 @@ class NormalLoginForm extends Component {
     console.log(this.props)
   }
 
-  componentDidMount() {
+  /*componentDidMount() {
     const { global: { currentUser }, dispatch } = this.props;
     const token = localStorage.getItem('token');
     console.log(token)
@@ -58,7 +58,7 @@ class NormalLoginForm extends Component {
         })
       }
     }
-  }
+  }*/
 
   componentWillUpdate = () => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -68,7 +68,7 @@ class NormalLoginForm extends Component {
     }
   };
 
-  componentDidUpdate(prevProps) {
+  /*componentDidUpdate(prevProps) {
     const {global:{currentUser},dispatch}=this.props;
 
     if(prevProps.global.currentUser!==currentUser)
@@ -97,7 +97,7 @@ class NormalLoginForm extends Component {
       {
         return ;
       }
-    }
+    }*/
 
 
   handleClick = () => {

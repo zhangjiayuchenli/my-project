@@ -168,13 +168,12 @@ class GlobalHeader extends Component {
           {localStorage.getItem('types') === 'stu' ? stuNotice : null}
           <HeaderDropdown overlay={menu}>
             <span className={`${styles.action} ${styles.account}`}>
-              {localStorage.getItem('types') === 'teacher' ? (
+              {localStorage.getItem('types') === 'teacher'&&currentUser!==null ? (
                 <Avatar
                   src={currentUser.teacherAvatar}
                   size="small"
                   icon="user"
                 />
-
               ) : null}
               {localStorage.getItem('types') === 'admin' ? (
                 adminava
@@ -186,11 +185,11 @@ class GlobalHeader extends Component {
                   icon="user"
                 />
               ) : null}
-              {localStorage.getItem('types') === 'teacher' ? (
+              {localStorage.getItem('types') === 'teacher' &&currentUser!==null? (
                 <span>{currentUser.teacherName}</span>
               ) : null}
               {localStorage.getItem('types') === 'admin' ? (
-                <span>{currentUser.name}</span>
+                <span>{currentUser.username}</span>
               ) : null}
               {localStorage.getItem('types') === 'stu' ? (
                 <span>{currentUser.studentName}</span>

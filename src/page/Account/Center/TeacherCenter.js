@@ -1,30 +1,25 @@
 import React, { Component } from 'react';
-import { Card, Divider, Tag, Upload, message, Button, Icon, Row, Col } from 'antd';
+import { Card, Divider, Tag, Row, Col } from 'antd';
 import { connect } from 'dva';
 import styles from './TeacherCenter.less';
-const mapStateToProps = state => {
-  return {
-    user: state.login.user,
-  };
-};
+
 const style = {
   width: '400px',
   margin: '40px',
   boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
   border: '1px solid #e8e8e8',
 };
-@connect(mapStateToProps)
-export default class TeacherCenter extends Component {
-  state = {
-    teacherAvatar: JSON.parse(sessionStorage.getItem('user')).teacherAvatar,
-    teacherName: JSON.parse(sessionStorage.getItem('user')).teacherName,
-    teacherAddress: JSON.parse(sessionStorage.getItem('user')).teacherAddress,
-  };
+
+@connect(({global})=>({
+    global,
+    currentUser:global.currentUser
+  })
+)
+class TeacherCenter extends Component {
 
   render() {
-    console.log('11111111');
-    console.log(JSON.parse(sessionStorage.getItem('user')).id);
-    console.log('11111111');
+    const {currentUser}=this.props
+    console.log(currentUser)
     return (
       <Row gutter={24}>
         <Col span={24}>
@@ -33,10 +28,10 @@ export default class TeacherCenter extends Component {
               <div className={styles.avatarHolder}>
                 <img
                   alt=""
-                  src={this.state.teacherAvatar}
+                  src={currentUser.teacherAvatar}
                   style={{ width: '100px', height: '100px', borderRadius: '32px' }}
                 />
-                <div className={styles.name}>{this.state.teacherName}</div>
+                <div className={styles.name}>{currentUser.teacherName}</div>
                 <div>春蚕到死丝方尽，蜡炬成灰泪始干</div>
               </div>
               <div className={styles.detail}>
@@ -50,7 +45,7 @@ export default class TeacherCenter extends Component {
                 </p>
                 <p>
                   <i className={styles.address} />
-                  {this.state.teacherAddress}
+                  {currentUser.teacherAddress}
                 </p>
               </div>
               <Divider dashed />
@@ -71,3 +66,4 @@ export default class TeacherCenter extends Component {
     );
   }
 }
+export default TeacherCenter

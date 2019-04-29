@@ -45,7 +45,7 @@ class BaseView extends Component {
       if (!err) {
         console.log('Received values of form: ', values);
         dispatch({
-          type:'teacher/updateStu',
+          type:'teacher/updateTeacher',
           payload: values,
         })
 
@@ -58,7 +58,7 @@ class BaseView extends Component {
   };
 
   success = () => {
-    message.success('发布成功');
+    message.success('修改成功');
   };
 
   render() {

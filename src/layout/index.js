@@ -138,11 +138,8 @@ class BasicLayout extends Component {
           <Menu.Item key="2">
             <Link to="/account/center/teacher">个人信息</Link>
           </Menu.Item>
-          <Menu.Item key="3">
-            <Link to="/account/setting/teacher">修改信息</Link>
-          </Menu.Item>
           <Menu.Item key="4">
-            <Link to="/account/setting">修改信息2.0</Link>
+            <Link to="/account/setting">修改信息</Link>
           </Menu.Item>
         </SubMenu>
       </Menu>
@@ -181,11 +178,8 @@ class BasicLayout extends Component {
           <Menu.Item key="2">
             <Link to="/account/center/student">个人信息</Link>
           </Menu.Item>
-          <Menu.Item key="3">
-            <Link to="/account/setting/student">修改信息</Link>
-          </Menu.Item>
           <Menu.Item key="4">
-            <Link to="/account/settings">修改信息2.0</Link>
+            <Link to="/account/settings">修改信息</Link>
           </Menu.Item>
         </SubMenu>
       </Menu>

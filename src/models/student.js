@@ -15,40 +15,40 @@ export default {
     getStuAndCourses(state, { payload }) {
       return { ...state, ...{ stuList: payload } };
     },
+    getPasswordCaptcha(state, { payload }) {
+      return {
+        ...state,
+        ...{ passwordCode: payload },
+      };
+    },
   },
   effects: {
     *getStu(action, { call, put }) {
-      const url = '/student/selectAll';
-      const { res } = yield call(studentService.get, url);
+      const { res } = yield call(studentService.get, '/student/selectAll');
       yield put({ type: 'getStus', payload: res });
     },
-    *updateStu(action, { call, put }) {
-      const { payload } = action;
-      const url = '/student/updateStu';
-      console.log('111111');
-      const { res } = yield call(studentService.update, url, payload);
-      console.log('login');
-      console.log(res);
+    *updateStu({ payload }, { call, put }) {
+      const { res } = yield call(studentService.update, '/student/updateStu', payload);
       yield put({ type: 'getStus', payload: res });
     },
-    *adminUpdateStu(action, { call, put }) {
-      const { payload } = action;
+    *updateStuPassword({ payload }, { call,put }) {
+      const  {code}  =  yield call(studentService.update, '/student/updateStuPassword', payload);
+      yield put({
+        type:'getPasswordCaptcha',
+        payload:code
+      })
+    },
+    *adminUpdateStu({ payload }, { call, put }) {
       const url = '/student/adminUpdateStu';
-      console.log('111111');
       const { res } = yield call(studentService.update, url, payload);
-      console.log('login');
-      console.log(res);
       yield put({ type: 'getStus', payload: res });
     },
-    *deleteStu(action, { call, put }) {
-      const { payload } = action;
+    *deleteStu({ payload } , { call, put }) {
       const url = '/student/deleteStu';
       const { res } = yield call(studentService.delete, url, payload);
-
       yield put({ type: 'getStus', payload: res });
     },
-    *insertStu(action, { call, put }) {
-      const { payload } = action;
+    *insertStu({ payload }, { call, put }) {
       const url = '/student/insertStu';
       const { res } = yield call(studentService.insert, url, payload);
       yield put({ type: 'getStus', payload: res });

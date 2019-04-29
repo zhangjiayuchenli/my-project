@@ -1,4 +1,5 @@
 import request from '../utils/request';
+
 const studentService = {
   get(url) {
     return request.get(url);
