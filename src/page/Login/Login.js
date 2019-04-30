@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from 'react';
+import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
 import { Form, Icon, Input, Button, Checkbox, Radio, Carousel } from 'antd';
 import { connect } from 'dva';
 import router from 'umi/router';
 import { routerRedux } from 'dva/router';
+import SelectLang from '@/components/SelectLang';
 import Logo from '../../components/Logo';
 import styles from './Login.less';
 import GlobalFooter from '../../components/GlobalFooter';
@@ -68,7 +70,7 @@ class NormalLoginForm extends Component {
     }
   };
 
-  /*componentDidUpdate(prevProps) {
+   /*componentDidUpdate(prevProps) {
     const {global:{currentUser},dispatch}=this.props;
 
     if(prevProps.global.currentUser!==currentUser)
@@ -108,10 +110,8 @@ class NormalLoginForm extends Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
         localStorage.setItem('types', values.radio);
         sessionStorage.setItem('currentUser','false')
-        console.log(localStorage.getItem('types'))
         const {dispatch}=this.props;
         dispatch({
           type:'login/login',
@@ -125,8 +125,11 @@ class NormalLoginForm extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <div>
-        <div className={styles.slick}>
+      <div className={styles.container}>
+        <div className={styles.lang}>
+          <SelectLang />
+        </div>
+        {/*<div className={styles.slick}>
           <Carousel autoplay>
             <div>
               <Logo />
@@ -139,8 +142,8 @@ class NormalLoginForm extends Component {
               />
             </div>
           </Carousel>
-        </div>
-        <div className={styles.main}>
+        </div>*/}
+        <div className={styles.content}>
           <Logo />
           <Form onSubmit={this.handleSubmit}>
             <Form.Item>
@@ -164,38 +167,52 @@ class NormalLoginForm extends Component {
                 />
               )}
             </Form.Item>
-            <Form.Item>
+            <Form.Item style={{marginBottom:'2px'}}>
               {getFieldDecorator('radio', {
                 initialValue: 'teacher',
               })(
-                <Radio.Group>
-                  <Radio value="admin">管理员</Radio>
-                  <Radio value="teacher">教师</Radio>
-                  <Radio value="stu">学生</Radio>
+                <Radio.Group style={{width:"100%"}}>
+                  <Radio style={{width:"30%"}} value="admin">{
+                    formatMessage({ id: "app.login.admin" }, {})
+                  }</Radio>
+                  <Radio style={{width:"30%"}} value="teacher">{
+                    formatMessage({ id: "app.login.teacher" }, {})
+                  }</Radio>
+                  <Radio style={{width:"30%"}} value="stu">{
+                    formatMessage({ id: "app.login.student" }, {})
+                  }</Radio>
                 </Radio.Group>
               )}
             </Form.Item>
+
             <Form.Item>
               {getFieldDecorator('remember', {
                 valuePropName: 'checked',
                 initialValue: true,
-              })(<Checkbox>Remember me</Checkbox>)}
-              <a className="login-form-forgot" href="" onClick={this.handleClick}>
-                忘记密码
+              })(<Checkbox style={{float:"left"}}>
+                {
+                  formatMessage({ id: "app.login.remember-me" }, {})
+                }
+                 </Checkbox>)}
+              <a className={styles['login-form-forgot']} href="" onClick={this.handleClick}>
+                {
+                  formatMessage({ id: "app.login.forgot-password" }, {})
+                }
               </a>
-              &nbsp;
-              <br />
-              <Button type="primary" htmlType="submit" className="login-form-button">
-                登陆
+              <Button type="primary" htmlType="submit" className={styles.submit}>
+                {
+                  formatMessage({ id: "app.login.login" }, {})
+                }
               </Button>
-              &nbsp;
               <p>PS:账号为教师工号或学生学号，初始密码为123456</p>
             </Form.Item>
+
           </Form>
         </div>
-        <div className={styles.footer}>
-          <GlobalFooter links={links} copyright={copyright} />
-        </div>
+        <GlobalFooter links={links} copyright={copyright}  />
+        {/*<div className={styles.footer}>
+
+        </div>*/}
       </div>
     );
   }

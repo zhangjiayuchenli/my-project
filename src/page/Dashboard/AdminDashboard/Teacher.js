@@ -19,7 +19,7 @@ const mapDispatchToProps = dispatch => {
     onDelete: payload =>
       dispatch({
         type: 'teacher/deleteTeacher',
-        payload: payload,
+        payload,
       }),
     onDeleteCheck: () =>
       dispatch({
@@ -50,10 +50,9 @@ class TeacherTable extends Component {
   state = {
     searchText: '',
   };
+
   componentWillMount = () => {
-    console.log('*************');
     this.props.onSubmit();
-    console.log(this.props.userList);
   };
 
   getColumnSearchProps = dataIndex => ({
@@ -117,7 +116,7 @@ class TeacherTable extends Component {
     this.setState({ searchText: '' });
   };
   render() {
-    const { onDelete } = this.props;
+    const { onDelete ,userList=[],show,onDeleteCheck} = this.props;
     const columns = [
       {
         title: 'id',
@@ -164,7 +163,7 @@ class TeacherTable extends Component {
             <Divider type="vertical" />
             <Popconfirm
               title="Are you sure？"
-              onConfirm={hah => this.props.onDelete(record)}
+              onConfirm={e => onDelete(record)}
               onCancel={this.cancel}
               icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
             >
@@ -176,24 +175,24 @@ class TeacherTable extends Component {
         ),
       },
     ];
-
     return (
       <div>
-        <Button type="primary" onClick={this.props.show}>
+        <Button type="primary" onClick={show}>
           <Icon type="user-add" />
           添加
         </Button>
         &nbsp;
-        <Button type="danger" onClick={this.props.onDeleteCheck}>
+        <Button type="danger" onClick={onDeleteCheck}>
           <Icon type="user-delete" />
           删除
         </Button>
         <Table
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={this.props.userList}
+          dataSource={userList}
           rowKey={record => record.id}
           scroll={{ x: 1300 }}
+          pagination={{total:userList.length,showQuickJumper:true, defaultCurrent:1}}
         />
       </div>
     );

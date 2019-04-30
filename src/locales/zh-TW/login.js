@@ -1,6 +1,9 @@
 export default {
   'app.login.userName': '賬戶',
   'app.login.password': '密碼',
+  'app.login.admin': '管理員',
+  'app.login.teacher': '教師',
+  'app.login.student': '學生',
   'app.login.message-invalid-credentials': '賬戶或密碼錯誤（admin/ant.design）',
   'app.login.message-invalid-verification-code': '驗證碼錯誤',
   'app.login.tab-login-credentials': '賬戶密碼登錄',

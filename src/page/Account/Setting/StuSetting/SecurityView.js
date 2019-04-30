@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
 import { Form,Input,Button,Alert} from 'antd';
+import router from 'umi/router'
 import { connect } from 'dva';
 import styles from './SecurityView.less';
 
-@connect(({student,loading})=>({
-  student,
+@connect(({student,loading,login})=>({
+  student,login,
   submitting: loading.effects["student/updateStuPassword"]
 }))
 @Form.create()
@@ -13,16 +14,21 @@ class SecurityView extends Component {
   state = {
     confirmDirty: false,
   };
-  
-  componentDidUpdate = () => {
-    if (this.props.code == '0') {
-      //此处code是更新验证的code
-      alert('成功修改，请重新登录');
-      this.props.changeCodes({ code: 1 });
-      // 修改code值，此处code是登陆验证的code
-      router.replace('/login');
+
+  componentDidUpdate(prevProps) {
+    const {student:{passwordCode},dispatch,student}=this.props
+    if (student&&prevProps.student!==student&&passwordCode===0)
+    {
+        alert('成功修改，请重新登录');
+        dispatch({
+          type: 'login/logout',
+        })
+        sessionStorage.clear();
+        localStorage.clear();
+        router.replace('/login');
     }
-  };
+  }
+
 
   handleSubmit = e => {
     e.preventDefault();

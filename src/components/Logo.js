@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import logo from '../assets/logo.svg';
 import ucmp from '../assets/ucmp-logo-cloud.png';
 import styles from './logo.less';
+
 export default class Logo extends Component {
   render() {
     return (

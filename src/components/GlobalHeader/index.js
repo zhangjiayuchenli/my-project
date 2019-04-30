@@ -91,9 +91,7 @@ class GlobalHeader extends Component {
   };
 
   render() {
-    console.log(localStorage.getItem('types'))
     const { global:{noticesList,messageList,count}, onNoticeClear,getMessages,currentUser}  = this.props;
-    console.log(currentUser)
     const menu= (
       <Menu onClick={this.onClick}>
         <Menu.Item key="userCenter">

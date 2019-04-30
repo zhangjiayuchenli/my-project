@@ -39,7 +39,7 @@ class BasicLayout extends Component {
           key="sub1"
           title={
             <span>
-              <Icon type="dashboard" />
+              <Icon type="table" />
               <span>用户列表</span>
             </span>
           }
@@ -55,7 +55,7 @@ class BasicLayout extends Component {
           key="sub2"
           title={
             <span>
-              <Icon type="smile" />
+              <Icon type="message" />
               <span>消息发布</span>
             </span>
           }
@@ -74,7 +74,7 @@ class BasicLayout extends Component {
           key="sub3"
           title={
             <span>
-              <Icon type="smile" />
+              <Icon type="user" />
               <span>个人中心</span>
             </span>
           }
@@ -117,7 +117,7 @@ class BasicLayout extends Component {
           key="sub2"
           title={
             <span>
-              <Icon type="smile" />
+              <Icon type="message" />
               <span>消息发布</span>
             </span>
           }
@@ -130,7 +130,7 @@ class BasicLayout extends Component {
           key="sub3"
           title={
             <span>
-              <Icon type="smile" />
+              <Icon type="user" />
               <span>个人中心</span>
             </span>
           }
@@ -170,7 +170,7 @@ class BasicLayout extends Component {
           key="sub2"
           title={
             <span>
-              <Icon type="smile" />
+              <Icon type="user" />
               <span>个人中心</span>
             </span>
           }
@@ -184,19 +184,20 @@ class BasicLayout extends Component {
         </SubMenu>
       </Menu>
     );
+    const types=localStorage.getItem('types');
     return (
       <Layout>
         <Sider width={256} style={{ minHeight: '100vh' }}>
           <div style={{ height: '40px', background: 'rgba(255,255,255,.2)', margin: '16px' }}>
             <Logo />
           </div>
-          {localStorage.getItem('types') === 'admin' ? adminSub : null}
-          {localStorage.getItem('types') === 'teacher' ? teacherSub : null}
-          {localStorage.getItem('types') === 'stu' ? stuSub : null}
+
+          {types === 'admin' ? adminSub : null}
+          {types === 'teacher' ? teacherSub : null}
+          {types === 'stu' ? stuSub : null}
         </Sider>
         <Layout>
           <Header style={{ padding: 0, width: '90%' }} />
-
           <Content style={{ margin: '24px 16px 0' }} className={styles.content}>
             <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>{children}</div>
           </Content>

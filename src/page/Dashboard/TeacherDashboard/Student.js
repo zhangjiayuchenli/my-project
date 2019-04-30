@@ -60,10 +60,19 @@ class StudentTable extends Component {
   state = {
     searchText: '',
   };
+
   componentDidMount = () => {
 
     this.props.onSubmit({  year: '1' });
     this.props.onGetStuIdAndYear();
+  };
+
+  handleStandardTableChange = (pagination) => {
+    const { dispatch } = this.props;
+    const params = {
+      currentPage: pagination.current,
+      pageSize: pagination.pageSize,
+    };
   };
 
   handleChange = value => {
@@ -245,6 +254,8 @@ class StudentTable extends Component {
           dataSource={stuList}
           rowKey={record => record.id}
           scroll={{ x: 1300 }}
+          onChange={this.handleStandardTableChange}
+          pagination={{total:stuList.length,showQuickJumper:true, defaultCurrent:1}}
         />
       </div>
     );

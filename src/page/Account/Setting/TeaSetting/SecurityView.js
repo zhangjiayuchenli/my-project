@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
 import { Form,Input,Button,Alert} from 'antd';
 import { connect } from 'dva';
+import router from 'umi/router'
 import styles from './SecurityView.less';
 
 @connect(({teacher,loading})=>({
@@ -14,9 +15,21 @@ class SecurityView extends Component {
     confirmDirty: false,
   };
 
-  onClose = (e) => {
-    console.log(e, 'I was closed.');
-  };
+  componentDidUpdate(prevProps) {
+    const {teacher:{passwordCode},dispatch,teacher}=this.props
+    if (teacher&&prevProps.teacher!==teacher&&passwordCode===0)
+    {
+        alert('成功修改，请重新登录');
+        dispatch({
+          type: 'login/logout',
+        })
+        sessionStorage.clear();
+        localStorage.clear();
+        router.replace('/login');
+
+    }
+
+  }
 
   renderMessage = () => (
     <Alert
@@ -28,6 +41,10 @@ class SecurityView extends Component {
       onClose={this.onClose}
     />
   );
+
+  onClose = (e) => {
+    console.log(e, 'I was closed.');
+  };
 
   handleSubmit = e => {
     e.preventDefault();
@@ -112,7 +129,7 @@ class SecurityView extends Component {
                 ],
               })(<Input.Password type="password" onBlur={this.handleConfirmBlur} />)}
             </Form.Item>
-            <Form.Item >
+            <Form.Item>
               <Button type="primary" htmlType="submit">
                 提交
               </Button>

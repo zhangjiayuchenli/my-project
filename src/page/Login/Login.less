@@ -1,56 +1,80 @@
 @import '~antd/lib/style/themes/default.less';
-.slick {
-  text-align: center;
-  height: 100%;
+.container{
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: auto;
+  background: @layout-body-background;
+}
+.lang {
   width: 100%;
-  line-height: 160px;
-  background: #364d79;
-  overflow: hidden;
-  position: relative;
-  z-index: -1;
+  height: 40px;
+  line-height: 44px;
+  text-align: right;
+  :global(.ant-dropdown-trigger) {
+    margin-right: 24px;
+  }
 }
-.footer {
-  top: 50%;
-  margin: 180px 0 24px 0;
-  position: relative;
-}
-.main {
+.content {
+  flex: 1;
+  padding: 32px 0;
   text-align: center;
   width: 388px;
-  margin: auto;
-  top: 100px;
-  position: relative;
-  //margin-top: 20px;
-  background-image: url('https://gw.alipayobjects.com/zos/rmsportal/TVYTbAXWheQpRcWDaDMu.svg');
-
-  .icon {
-    margin-left: 16px;
-    color: rgba(0, 0, 0, 0.2);
-    font-size: 24px;
-    vertical-align: middle;
-    cursor: pointer;
-    transition: color 0.3s;
-
-    &:hover {
-      color: @primary-color;
-    }
+  margin-top: 120px;
+  margin-left: 560px;
+  top: 200px;
+  //position: relative;
+  .login-form-forgot {
+    float: right;
   }
-  .car {
-    text-align: center;
-    height: 160px;
-    line-height: 160px;
-    background: #364d79;
+  .submit{
+    width: 100%;
+  }
+}
+
+@media (min-width: @screen-md-min) {
+  .container {
+    background-image: url('https://gw.alipayobjects.com/zos/rmsportal/TVYTbAXWheQpRcWDaDMu.svg');
+    background-repeat: no-repeat;
+    background-position: center 110px;
     background-size: 100%;
-    overflow: hidden;
-    color: #fff;
   }
-  .other {
-    margin-top: 24px;
-    line-height: 22px;
-    text-align: left;
 
-    .register {
-      float: right;
-    }
+  .content {
+    padding: 32px 0 24px 0;
   }
+}
+
+.top {
+  text-align: center;
+}
+
+.header {
+  height: 44px;
+  line-height: 44px;
+  a {
+    text-decoration: none;
+  }
+}
+
+.logo {
+  height: 44px;
+  margin-right: 16px;
+  vertical-align: top;
+}
+
+.title {
+  position: relative;
+  top: 2px;
+  color: @heading-color;
+  font-weight: 600;
+  font-size: 33px;
+  font-family: Avenir, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.desc {
+  margin-top: 12px;
+  margin-bottom: 40px;
+  color: @text-color-secondary;
+  font-size: @font-size-base;
 }

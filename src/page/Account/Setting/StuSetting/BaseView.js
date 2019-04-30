@@ -26,6 +26,7 @@ class BaseView extends Component {
     Object.keys(form.getFieldsValue()).forEach(key => {
       const obj = {};
       obj[key] = currentUser[key] || null;
+      console.log(obj)
       obj.studentBirthday = moment(obj.studentBirthday);
       form.setFieldsValue(obj);
     });

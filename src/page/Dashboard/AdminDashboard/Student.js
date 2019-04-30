@@ -128,6 +128,7 @@ class StudentTable extends Component {
   };
   render() {
     const { onDelete } = this.props;
+    const {userList=[]}=this.props;
     const columns = [
       {
         title: 'id',
@@ -195,7 +196,6 @@ class StudentTable extends Component {
         ),
       },
     ];
-
     return (
       <div>
         <Button type="primary" onClick={this.props.show}>
@@ -210,8 +210,9 @@ class StudentTable extends Component {
         <Table
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={this.props.userList}rowKey={record => record.id}
-
+          dataSource={userList}
+          rowKey={record => record.id}
+          pagination={{total:userList.length,showQuickJumper:true, defaultCurrent:1}}
           scroll={{ x: 1300 }}
         />
       </div>

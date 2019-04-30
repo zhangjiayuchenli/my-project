@@ -70,9 +70,7 @@ const cols = {
   mapDispatchToProps
 )
 class Basic extends React.Component {
-  componentWillMount() {
-    //this.props.onSearch(202151336);
-  }
+
   handleSearch = e => {
     console.log(e);
     this.props.onSearch({ teacherId: localStorage.getItem('id'), text: e });
@@ -84,10 +82,10 @@ class Basic extends React.Component {
       <div>
         <div>
           <Search
-            placeholder="input search text"
+            placeholder="请输入学生学号或姓名查找"
             onSearch={value => this.handleSearch(value)}
             enterButton
-            style={{ width: 200 }}
+            style={{ width: 300 }}
           />
         </div>
         <div>

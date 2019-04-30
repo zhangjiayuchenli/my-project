@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Table, Divider, Tag, Select } from 'antd';
 import styles from './StudentTable.less';
 import { connect } from 'dva';
+import moment from '../../Account/Setting/StuSetting/BaseView';
 const { Column, ColumnGroup, Colums } = Table;
 const { Option } = Select;
 const mapStateToProps = state => {
@@ -31,12 +32,31 @@ const mapDispatchToProps = dispatch => {
     this.props.onSubmit({ year: value });
   };
   render() {
-    const { stuList = [] } = this.props;
+    const { stuList={}}  = this.props;
+    console.log(stuList)
+    let data = []
+    data.push(stuList)
+    console.log(data)
+    /*let data = [];
+    for (let i in stuList) {
+      let o = {};
+      o[i] = stuList[i];
+      data.push(o)
+    }*/
+
     const columns = [
       { title: 'stuId', dataIndex: 'id' },
       { title: 'name', dataIndex: 'studentName' },
       //{title: 'class', dataIndex:'className'},
     ];
+    /*let data = [];
+    Object.keys(columns.dataIndex).forEach(dataIndex => {
+      const obj = {};
+      obj[dataIndex] = stuList[dataIndex] || null;
+      console.log(obj)
+    });*/
+    //data.push(stuList);
+    console.log(data);
     const columns2 = [
       {
         title: 'physics',
@@ -78,16 +98,16 @@ const mapDispatchToProps = dispatch => {
         <Table
           pagination={false}
           columns={columns}
-          rowKey={"1"}
-          dataSource={[stuList]}
+          rowKey={record => record.id}
+          dataSource={data}
           title={() => '学生成绩'}
         />
-        <Table
+        {/*<Table
           columns={columns2}
           rowKey={"1"}
           dataSource={[stuList]}
           pagination={false}
-        />
+        />*/}
       </div>
     );
   }

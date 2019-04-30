@@ -3,12 +3,12 @@ version: "3.5"
 services:
   ant-design-pro_build:
     build: ../
-    container_name: "ant-design-pro_build"
+    container_name: "ant-desinginxgn-pro_build"
     volumes:
       - dist:/usr/src/app/dist
 
   ant-design-pro_web:
-    image: nginx
+    image:
     ports:
       - 80:80
     container_name: "ant-design-pro_web"
