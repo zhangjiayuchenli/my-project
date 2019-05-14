@@ -1,65 +1,43 @@
 import React, { Component } from 'react';
-import { Modal, Form, Row, Col, Input, Button, Icon, InputNumber, Select } from 'antd';
+import { Modal, Form, Row, Col, Input, DatePicker, InputNumber, Select } from 'antd';
 import { connect } from 'dva';
-import StudentTable from '../Dashboard/TeacherDashboard/Student';
+import moment from 'moment';
+import ClassroomCheck from '../Check/ClassroomCheck';
 
 const { Option } = Select;
-const mapStateToProps = state => {
-  return {
-    StuIdAndYearList: state.teacher.StuIdAndYearList,
-    stuList: state.teacher.stuList,
-    StuIdAndYearList2: state.teacher.StuIdAndYearList2,
-  };
-};
-const mapDispatchToProps = dispatch => {
-  return {
-    /* 修改学生成绩 */
-    onUpdate: payload =>
-      dispatch({
-        type: 'teacher/updateStuCourse',
-        payload,
-      }),
-    /* 添加学生成绩 */
-    onInsert: payload =>
-      dispatch({
-        type: 'teacher/insertStuCourse',
-        payload,
-      }),
-    // 查询每个学生对应学生表信息(学号-学年)
-    onGetStuOfYear: payload =>
-      dispatch({
-        type: 'teacher/getStuOfYear',
-        payload,
-      }),
-  };
-};
-@connect(
-  mapStateToProps,
-  mapDispatchToProps
-)
-class StuCourseModal extends Component {
+
+@connect(({check})=>({
+  check,
+  StuIdList:check.StuIdList,
+  ClassroomCreatetimeList:check.ClassroomCreatetimeList
+}))
+@Form.create()
+class ClassroomCheckModal extends Component {
   state = {
     ModalText: 'Content of the modal',
     visible: false,
     confirmLoading: false,
     record: '',
-    year: '',
-    teacherId: '',
+
   };
 
   handleChange = e => {
     const { getFieldValue } = this.props.form;
+    const {dispatch}=this.props;
     console.log(e);
-    this.props.onGetStuOfYear({ studentId: e });
+    dispatch({
+      type: 'check/getClassroomStuOfCreatetime',
+      payload:{studentId:e}
+    })
+
   };
 
   showModal = record => {
     this.setState({
       visible: true,
       record,
-      year: this.props.stuList != null ? this.props.stuList[0].schoolYear : null,
-      teacherId: this.props.stuList != null ? this.props.stuList[0].teacherId : null,
     });
+    console.log(record)
   };
 
   handleOk = () => {
@@ -76,37 +54,44 @@ class StuCourseModal extends Component {
   };
 
   handleSubmit = e => {
-    console.log(e);
-    console.log(this.state.record);
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        const {dispatch,StuIdList,ClassroomCreatetimeList}=this.props;
         const { id } = this.state.record;
-        const { StuIdAndYearList, StuIdAndYearList2 } = this.props;
-        const { stuId, schoolYear } = values;
+        const { stuId, creatTime } = values;
         if (!id) {
           // 判断学号是否为本班学生学号
+          // 判断学号是否为本班学生学号
           const isStuId =
-            StuIdAndYearList != null
-              ? StuIdAndYearList.map(l => l.id).some(s => s === stuId)
+            StuIdList != null
+              ? StuIdList.map(l => l.id).some(s => s === stuId)
               : null;
           const isYear =
-            StuIdAndYearList2 != null
-              ? StuIdAndYearList2.map(l => l.schoolYear).some(s => s == schoolYear)
+            ClassroomCreatetimeList != null
+              ? ClassroomCreatetimeList.map(l => l.time).some(s => s === creatTime)
               : null;
           if (isStuId) {
             if (isYear) {
               alert('该学年学生成绩已经存在，请重新输入');
               console.log('该学年学生成绩已经存在，请重新输入');
             } else if (!isYear) {
-              this.props.onInsert({ ...values });
+              dispatch({
+                type:'check/insertClassroom',
+                payload:({...values})
+              })
             }
           }
+          else{
+            alert("该学号学生不是本班学生")
+          }
         } else {
-          this.props.onUpdate({ id, ...values });
+          dispatch({
+            type:'check/updateClassroom',
+            payload:({id, ...values})
+          })
         }
-
         this.handleCancel();
       }
     });
@@ -122,20 +107,22 @@ class StuCourseModal extends Component {
 
   render() {
     const { visible, confirmLoading, ModalText } = this.state;
-    const { getFieldDecorator, getFieldValue } = this.props.form;
+    const { getFieldDecorator } = this.props.form;
     const {
-      chinese,
-      math,
-      english,
-      chemistry,
+      creatTime,
+      schoolYear,
+      week,
+      positiveDegree,
+      later,
+      work,
+      discussionDegree,
+      helpClassmates,
       studentName,
       stuId,
-      physics,
-      biology,
     } = this.state.record;
     return (
       <div>
-        <StudentTable show={this.showModal} />
+        <ClassroomCheck show={this.showModal} />
         <Modal
           title="Title"
           visible={visible}
@@ -145,7 +132,7 @@ class StuCourseModal extends Component {
         >
           <Form layout="vertical" hideRequiredMark onSubmit={this.handleSubmit}>
             <Row gutter={16}>
-              <Col span={8}>
+              <Col span={7}>
                 <Form.Item label="Name">
                   {getFieldDecorator('studentName', {
                     initialValue: studentName,
@@ -156,7 +143,7 @@ class StuCourseModal extends Component {
                   })(<Input placeholder="Please enter user name" />)}
                 </Form.Item>
               </Col>
-              <Col span={10}>
+              <Col span={8}>
                 <Form.Item label="StuId">
                   {getFieldDecorator('stuId', {
                     initialValue: stuId,
@@ -170,14 +157,32 @@ class StuCourseModal extends Component {
                   )}
                 </Form.Item>
               </Col>
-              <Col span={6}>
+              <Col span={5}>
                 <Form.Item label="学年">
                   {getFieldDecorator('schoolYear', {
+                    initialValue: schoolYear,
                     rules: [{ required: true, message: 'Please enter user sex' }],
                   })(
                     <Select style={{ width: '100%' }} allowClear showSearch>
-                      <Option key="1">第一学期</Option>
-                      <Option key="2">第二学期</Option>
+                      <Option key="第一学期">第一学期</Option>
+                      <Option key="第二学期">第二学期</Option>
+                    </Select>
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={4}>
+                <Form.Item label="当前周">
+                  {getFieldDecorator('week', {
+                    initialValue: week,
+                    rules: [{ required: true, message: 'Please enter user sex' }],
+                  })(
+                    <Select style={{ width: '100%' }} allowClear showSearch>
+                      <Option key="第一周">第一周</Option>
+                      <Option key="第二周">第二周</Option>
+                      <Option key="第三周">第三周</Option>
+                      <Option key="第四周">第四周</Option>
+                      <Option key="第五周">第五周</Option>
+
                     </Select>
                   )}
                 </Form.Item>
@@ -185,21 +190,21 @@ class StuCourseModal extends Component {
             </Row>
             <Row gutter={10}>
               <Col span={8}>
-                <Form.Item label="Chinese">
-                  {getFieldDecorator('chinese', {
-                    initialValue: chinese,
+                <Form.Item label="上课积极回答">
+                  {getFieldDecorator('positiveDegree', {
+                    initialValue: positiveDegree,
                   })(<InputNumber
                     style={{ width: '100%' }}
                     min={1}
-                    max={150}
+                    max={10}
                     placeholder="Please enter physics"
                   />)}
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item label="Math">
-                  {getFieldDecorator('math', {
-                    initialValue: math,
+                <Form.Item label="上课迟到">
+                  {getFieldDecorator('later', {
+                    initialValue: later,
                   })(<InputNumber style={{ width: '100%' }}
                                   min={1}
                                   max={150}
@@ -207,9 +212,9 @@ class StuCourseModal extends Component {
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item label="English">
-                  {getFieldDecorator('english', {
-                    initialValue: english,
+                <Form.Item label="课堂作业评分">
+                  {getFieldDecorator('work', {
+                    initialValue: work,
                   })(<InputNumber style={{ width: '100%' }}
                                   min={1}
                                   max={150}
@@ -219,9 +224,9 @@ class StuCourseModal extends Component {
             </Row>
             <Row gutter={16}>
               <Col span={8}>
-                <Form.Item label="Physics">
-                  {getFieldDecorator('physics', {
-                    initialValue: physics,
+                <Form.Item label="小组讨论活跃度">
+                  {getFieldDecorator('discussionDegree', {
+                    initialValue: discussionDegree,
                   })(<InputNumber style={{ width: '100%' }}
                                   min={1}
                                   max={100}
@@ -229,17 +234,18 @@ class StuCourseModal extends Component {
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item label="Chemistry">
-                  {getFieldDecorator('chemistry', {
-                    initialValue: chemistry,
+                <Form.Item label="帮助同学">
+                  {getFieldDecorator('helpClassmates', {
+                    initialValue: helpClassmates,
                   })(<InputNumber style={{ width: '100%' }} placeholder="Please enter phone" />)}
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item label="Biology">
-                  {getFieldDecorator('biology', {
-                    initialValue: biology,
-                  })(<InputNumber style={{ width: '100%' }} placeholder="Please enter phone" />)}
+                <Form.Item label="Birthday">
+                  {getFieldDecorator('creatTime', {
+                    initialValue: creatTime?moment(new Date(creatTime)):null,
+                    rules: [{ required: true, message: 'Please choose the dateTime' }],
+                  })(<DatePicker onChange={this.onChange} />)}
                 </Form.Item>
               </Col>
             </Row>
@@ -250,5 +256,4 @@ class StuCourseModal extends Component {
     );
   }
 }
-const App = Form.create()(StuCourseModal);
-export default App;
+export default ClassroomCheckModal;

@@ -30,6 +30,8 @@ export default {
       };
     },
 
+
+
   },
   effects: {
     // 管理员获取到所有教师的信息
@@ -38,6 +40,9 @@ export default {
       const { res } = yield call(teacherService.get, url);
       yield put({ type: 'getTeachers', payload: res });
     },
+
+
+
     // 教师发布消息到本班班级
     *sendMessage({ payload }, { call }) {
       const url = '/teacher/sendMessage';
@@ -57,16 +62,23 @@ export default {
     },
     // 教师通过多选删除本班学生的成绩
     *deleteStuAndCourseByCheck({ payload }, { call, put }) {
+      console.log("执行多选删除")
+      console.log(payload)
       const url = '/teacher/deleteStuAndCourseByCheck';
       const { res } = yield call(teacherService.deleteStuAndCourseByCheckByCheck, url, payload);
       yield put({ type: 'getStuAndCourses', payload: res });
     },
+
+
+
     // 教师删除学生成绩
     *deleteStuAndCourses({ payload }, { call, put }) {
       const url = '/teacher/deleteStuAndCourse';
       const { res } = yield call(teacherService.deleteStuAndCourse, url, payload);
       yield put({ type: 'getStuAndCourses', payload: res });
     },
+
+
     // 获取本班学生ID及各科成绩对应学年
     *selectStuIdAndYearByTeacherId(_, { call, put }) {
       const url = '/teacher/selectStuIdAndYearByTeacherId';
@@ -75,6 +87,7 @@ export default {
     },
     // 获取本班学生及各科成绩
     *getStuAndCourse({ payload }, { call, put }) {
+      console.log("*************")
       const url = `/teacher/selectCourseByYears?year=${  payload.year  }`;
       const { res } = yield call(teacherService.get, url);
       yield put({ type: 'getStuAndCourses', payload: res });

@@ -5,44 +5,13 @@ import { connect } from 'dva';
 import Highlighter from 'react-highlight-words';
 
 const { Option } = Select;
-const mapStateToProps = state => {
-  return {
-    stuList: state.teacher.stuList,
-    id: state.login.id,
-  };
-};
 
-const mapDispatchToProps = dispatch => {
-  return {
-    onSubmit: payload =>
-      dispatch({
-        type: 'teacher/getStuAndCourse',
-        payload,
-      }),
-    onGetStuIdAndYear: payload =>
-      dispatch({
-        type: 'teacher/selectStuIdAndYearByTeacherId',
-        payload: payload,
-      }),
-    onDelete: payload =>
-      dispatch({
-        type: 'teacher/deleteStuAndCourses',
-        payload: payload,
-      }),
-
-    onDeleteCheck: payload =>
-      dispatch({
-        type: 'teacher/deleteStuAndCourseByCheck',
-        payload: payload,
-      }),
-  };
-};
 
 let list = [];
 
 const rowSelection = {
   onChange: (selectedRowKeys, selectedRows) => {
-    console.log('selectedRowKeys: ', selectedRowKeys, 'selectedRows: ');
+    console.log('selectedRowKeys: ', selectedRowKeys, 'selectedRows: ',selectedRows);
     list = selectedRowKeys;
     console.log(list);
   },
@@ -52,19 +21,59 @@ const rowSelection = {
   }),
 };
 
-@connect(
-  mapStateToProps,
-  mapDispatchToProps
-)
-class StudentTable extends Component {
+const provinceData = ['第一学期', '第二学期'];
+const cityData = {
+  第一学期: ['第一周', '第二周', '第三周'],
+  第二学期: ['第一周', '第二周', '第三周'],
+};
+
+@connect(({check,teacher})=>({
+  check,teacher,
+  classroomList:check.classroomList,
+
+
+}))
+class ClassroomCheck extends Component {
   state = {
     searchText: '',
+    cities: cityData[provinceData[0]],
+    secondCity: cityData[provinceData[0]][0],
+    province:provinceData[0]
   };
 
-  componentDidMount = () => {
-    console.log("11111u")
-    this.props.onSubmit({  year: '1' });
-    this.props.onGetStuIdAndYear();
+
+  handleProvinceChange = (value) => {
+    console.log(value)
+    this.setState({
+      cities: cityData[value],
+      secondCity: cityData[value][0],
+      province:value
+    });
+  }
+
+  onSecondCityChange = (value) => {
+    this.setState({
+      secondCity: value,
+    });
+    const {dispatch}=this.props;
+    const {province}=this.state;
+    dispatch({
+      type:'check/getClassroomCheck',
+      payload:({year:province,week:value})
+    })
+  }
+
+  componentWillMount = () => {
+    const {dispatch}=this.props;
+    const {secondCity}=this.state;
+    dispatch({
+      type:'check/getClassroomCheck',
+      payload:({year:provinceData[0],week:secondCity})
+    })
+    dispatch({
+      type: 'check/selectStuIdByTeacherId',
+
+    })
   };
 
   handleStandardTableChange = (pagination) => {
@@ -76,7 +85,7 @@ class StudentTable extends Component {
   };
 
   handleChange = value => {
-    this.props.onSubmit({  year: value });
+
   };
 
   getColumnSearchProps = dataIndex => ({
@@ -119,14 +128,15 @@ class StudentTable extends Component {
         setTimeout(() => this.searchInput.select());
       }
     },
-    render: text => (
+    /*render: text => (
       <Highlighter
         highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
         searchWords={[this.state.searchText]}
         autoEscape
         textToHighlight={text.toString()}
       />
-    ),
+
+    ),*/
   });
 
   handleSearch = (selectedKeys, confirm) => {
@@ -138,9 +148,26 @@ class StudentTable extends Component {
     clearFilters();
     this.setState({ searchText: '' });
   };
-  render() {
 
-    const { onDelete, id } = this.props;
+  onDelete=payload=>{
+    const { dispatch } = this.props;
+    dispatch({
+      type:'check/deleteClassroom',
+      payload
+    })
+  }
+
+  onDeleteCheck= payload =>{
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'check/deleteClassroomByCheck',
+      payload
+    })
+  }
+
+  render() {
+    const { classroomList = [] } = this.props;
+    const { cities } = this.state;
     const columns = [
       {
         title: 'stuId',
@@ -156,41 +183,33 @@ class StudentTable extends Component {
         sortDirections: ['descend'],
       },
       {
-        title: 'physics',
-        dataIndex: 'physics',
-        sorter: (a, b) => a.physics - b.physics,
-        sortDirections: ['descend', 'ascend'],
+        title: '日期',
+        dataIndex: 'creatTime',
+        ...this.getColumnSearchProps('creatTime'),
       },
       {
-        title: 'math',
-        dataIndex: 'math',
-        sorter: (a, b) => a.math - b.math,
-        sortDirections: ['descend', 'ascend'],
+        title: '上课积极回答',
+        dataIndex: 'positiveDegree',
       },
       {
-        title: 'english',
-        dataIndex: 'english',
-        sorter: (a, b) => a.english - b.english,
-        sortDirections: ['descend', 'ascend'],
-      },
-      {
-        title: 'chemistry',
-        dataIndex: 'chemistry',
-        sorter: (a, b) => a.chemistry - b.chemistry,
-        sortDirections: ['chemistry', 'chemistry'],
-      },
-      {
-        title: 'chinese',
-        dataIndex: 'chinese',
-        sorter: (a, b) => a.chinese - b.chinese,
-        sortDirections: ['descend', 'ascend'],
-      },
-      {
-        title: 'biology',
-        dataIndex: 'biology',
+        title: '上课迟到',
+        dataIndex: 'later',
 
-        sorter: (a, b) => a.biology - b.biology,
-        sortDirections: ['descend', 'ascend'],
+      },
+      {
+        title: '课堂作业评分',
+        dataIndex: 'work',
+
+      },
+      {
+        title: '小组讨论活跃度',
+        dataIndex: 'discussionDegree',
+
+      },
+      {
+        title: '帮助同学',
+        dataIndex: 'helpClassmates',
+
       },
       {
         title: 'Action',
@@ -204,7 +223,7 @@ class StudentTable extends Component {
             <Divider type="vertical" />
             <Popconfirm
               title="Are you sure？"
-              onConfirm={e => onDelete(record)}
+              onConfirm={e => this.onDelete(record)}
               onCancel={this.cancel}
               icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
             >
@@ -216,7 +235,6 @@ class StudentTable extends Component {
         ),
       },
     ];
-    const { stuList = [] } = this.props;
     return (
       <div>
         <Button type="primary" onClick={this.props.show}>
@@ -227,10 +245,10 @@ class StudentTable extends Component {
         <Button
           type="danger"
           onClick={e =>
-            this.props.onDeleteCheck({
-              list: list,
-              yearList: stuList.length > 0 ? [stuList[0].schoolYear] : null,
-              teacherIdList: stuList.length > 0 ? [stuList[0].teacherId] : null,
+            this.onDeleteCheck({
+              list,
+              year: classroomList.length > 0 ? [classroomList[0].schoolYear] : null,
+              week: classroomList.length > 0 ? [classroomList[0].week] : null,
             })
           }
         >
@@ -239,26 +257,30 @@ class StudentTable extends Component {
         </Button>
         &nbsp;
         <Select
-          onChange={this.handleChange}
-          defaultValue="1"
-          style={{ width: '20%' }}
-          allowClear
-          showSearch
+          defaultValue={this.state.province}
+          style={{ width: 120 }}
+          onChange={this.handleProvinceChange}
         >
-          <Option key="1">第一学期</Option>
-          <Option key="2">第二学期</Option>
+          {provinceData.map(province => <Option key={province}>{province}</Option>)}
+        </Select>
+        <Select
+          style={{ width: 120 }}
+          value={this.state.secondCity}
+          onChange={this.onSecondCityChange}
+        >
+          {cities.map(city => <Option key={city}>{city}</Option>)}
         </Select>
         <Table
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={stuList}
+          dataSource={classroomList}
           rowKey={record => record.id}
           scroll={{ x: 1300 }}
           onChange={this.handleStandardTableChange}
-          pagination={{total:stuList.length,showQuickJumper:true, defaultCurrent:1}}
+          pagination={{total:classroomList.length,showQuickJumper:true, defaultCurrent:1}}
         />
       </div>
     );
   }
 }
-export default StudentTable;
+export default ClassroomCheck;

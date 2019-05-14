@@ -1,8 +1,8 @@
 import request from '../utils/request';
 
 const teacherService = {
-  delete(url, { id }) {
-    return request.delete(url, { id });
+  delete(url, params) {
+    return request.delete(url, params);
   },
 
   deleteStuAndCourse(url, { id, teacherId, schoolYear }) {

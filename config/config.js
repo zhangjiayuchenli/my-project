@@ -76,6 +76,16 @@ export default {
             { component: '404' },
           ],
         },
+        //check
+        {
+          path: '/check',
+          routes: [
+            { path: '/check/teacher/classroomCheck', component: 'Modal/ClassroomCheckModal' },
+            { path: '/check/teacher/breakExerciseCheck', component: 'Modal/BreakExerciseCheckModal' },
+            { path: '/check/teacher/etiquetteCheck', component: 'Modal/EtiquetteCheckModal' },
+            { component: '404' },
+          ],
+        },
         //account
         {
           name: 'account',

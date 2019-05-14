@@ -5,38 +5,7 @@ import { connect } from 'dva';
 import Highlighter from 'react-highlight-words';
 
 const { Option } = Select;
-const mapStateToProps = state => {
-  return {
-    stuList: state.teacher.stuList,
-    id: state.login.id,
-  };
-};
 
-const mapDispatchToProps = dispatch => {
-  return {
-    onSubmit: payload =>
-      dispatch({
-        type: 'teacher/getStuAndCourse',
-        payload,
-      }),
-    onGetStuIdAndYear: payload =>
-      dispatch({
-        type: 'teacher/selectStuIdAndYearByTeacherId',
-        payload: payload,
-      }),
-    onDelete: payload =>
-      dispatch({
-        type: 'teacher/deleteStuAndCourses',
-        payload: payload,
-      }),
-
-    onDeleteCheck: payload =>
-      dispatch({
-        type: 'teacher/deleteStuAndCourseByCheck',
-        payload: payload,
-      }),
-  };
-};
 
 let list = [];
 
@@ -52,19 +21,61 @@ const rowSelection = {
   }),
 };
 
-@connect(
-  mapStateToProps,
-  mapDispatchToProps
-)
-class StudentTable extends Component {
+const provinceData = ['第一学期', '第二学期'];
+const cityData = {
+  第一学期: ['第一周', '第二周', '第三周'],
+  第二学期: ['第一周', '第二周', '第三周'],
+};
+
+@connect(({check})=>({
+  check,
+  EtiquetteList:check.EtiquetteList
+}))
+class EtiquetteCheck extends Component {
   state = {
     searchText: '',
+    cities: cityData[provinceData[0]],
+    secondCity: cityData[provinceData[0]][0],
+    province:provinceData[0]
   };
 
-  componentDidMount = () => {
-    console.log("11111u")
-    this.props.onSubmit({  year: '1' });
-    this.props.onGetStuIdAndYear();
+
+  handleProvinceChange = (value) => {
+    console.log(value)
+    this.setState({
+      cities: cityData[value],
+      secondCity: cityData[value][0],
+      province:value
+    });
+  }
+
+  onSecondCityChange = (value) => {
+    this.setState({
+      secondCity: value,
+    });
+    const {dispatch}=this.props;
+    const {cities,secondCity,province}=this.state;
+    console.log("1111111")
+    console.log(province)
+    console.log(secondCity)
+    console.log("1111111")
+    dispatch({
+      type:'check/getEtiquetteCheck',
+      payload:({year:province,week:value})
+    })
+  }
+
+  componentWillMount = () => {
+    const {dispatch}=this.props;
+    const {cities,secondCity}=this.state;
+    dispatch({
+      type:'check/getEtiquetteCheck',
+      payload:({year:provinceData[0],week:secondCity})
+    })
+    dispatch({
+      type: 'check/selectStuIdByTeacherId',
+
+    })
   };
 
   handleStandardTableChange = (pagination) => {
@@ -76,7 +87,7 @@ class StudentTable extends Component {
   };
 
   handleChange = value => {
-    this.props.onSubmit({  year: value });
+
   };
 
   getColumnSearchProps = dataIndex => ({
@@ -138,9 +149,28 @@ class StudentTable extends Component {
     clearFilters();
     this.setState({ searchText: '' });
   };
+
+  onDelete=payload=>{
+    const { dispatch } = this.props;
+    dispatch({
+      type:'check/deleteEtiquette',
+      payload
+    })
+  }
+
+  onDeleteCheck= payload =>{
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'check/deleteEtiquetteByCheck',
+      payload
+    })
+  }
+
   render() {
 
-    const { onDelete, id } = this.props;
+    const {  EtiquetteList = [] } = this.props;
+    const { cities } = this.state;
+    console.log(EtiquetteList)
     const columns = [
       {
         title: 'stuId',
@@ -156,41 +186,33 @@ class StudentTable extends Component {
         sortDirections: ['descend'],
       },
       {
-        title: 'physics',
-        dataIndex: 'physics',
-        sorter: (a, b) => a.physics - b.physics,
-        sortDirections: ['descend', 'ascend'],
+        title: '日期',
+        dataIndex: 'createTime',
+        ...this.getColumnSearchProps('createTime'),
       },
       {
-        title: 'math',
-        dataIndex: 'math',
-        sorter: (a, b) => a.math - b.math,
-        sortDirections: ['descend', 'ascend'],
+        title: '尊敬师长爱护同学',
+        dataIndex: 'respect',
       },
       {
-        title: 'english',
-        dataIndex: 'english',
-        sorter: (a, b) => a.english - b.english,
-        sortDirections: ['descend', 'ascend'],
-      },
-      {
-        title: 'chemistry',
-        dataIndex: 'chemistry',
-        sorter: (a, b) => a.chemistry - b.chemistry,
-        sortDirections: ['chemistry', 'chemistry'],
-      },
-      {
-        title: 'chinese',
-        dataIndex: 'chinese',
-        sorter: (a, b) => a.chinese - b.chinese,
-        sortDirections: ['descend', 'ascend'],
-      },
-      {
-        title: 'biology',
-        dataIndex: 'biology',
+        title: '升旗认真端正',
+        dataIndex: 'flag',
 
-        sorter: (a, b) => a.biology - b.biology,
-        sortDirections: ['descend', 'ascend'],
+      },
+      {
+        title: '衣着整洁讲卫生',
+        dataIndex: 'health',
+
+      },
+      {
+        title: '文明礼貌用语',
+        dataIndex: 'civilized',
+
+      },
+      {
+        title: '守学校纪律',
+        dataIndex: 'keepRules',
+
       },
       {
         title: 'Action',
@@ -204,7 +226,7 @@ class StudentTable extends Component {
             <Divider type="vertical" />
             <Popconfirm
               title="Are you sure？"
-              onConfirm={e => onDelete(record)}
+              onConfirm={e => this.onDelete(record)}
               onCancel={this.cancel}
               icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
             >
@@ -216,7 +238,6 @@ class StudentTable extends Component {
         ),
       },
     ];
-    const { stuList = [] } = this.props;
     return (
       <div>
         <Button type="primary" onClick={this.props.show}>
@@ -227,10 +248,10 @@ class StudentTable extends Component {
         <Button
           type="danger"
           onClick={e =>
-            this.props.onDeleteCheck({
-              list: list,
-              yearList: stuList.length > 0 ? [stuList[0].schoolYear] : null,
-              teacherIdList: stuList.length > 0 ? [stuList[0].teacherId] : null,
+            this.onDeleteCheck({
+              list,
+              year: EtiquetteList.length > 0 ? [EtiquetteList[0].schoolYear] : null,
+              week: EtiquetteList.length > 0 ? [EtiquetteList[0].week] : null,
             })
           }
         >
@@ -239,26 +260,30 @@ class StudentTable extends Component {
         </Button>
         &nbsp;
         <Select
-          onChange={this.handleChange}
-          defaultValue="1"
-          style={{ width: '20%' }}
-          allowClear
-          showSearch
+          defaultValue={this.state.province}
+          style={{ width: 120 }}
+          onChange={this.handleProvinceChange}
         >
-          <Option key="1">第一学期</Option>
-          <Option key="2">第二学期</Option>
+          {provinceData.map(province => <Option key={province}>{province}</Option>)}
+        </Select>
+        <Select
+          style={{ width: 120 }}
+          value={this.state.secondCity}
+          onChange={this.onSecondCityChange}
+        >
+          {cities.map(city => <Option key={city}>{city}</Option>)}
         </Select>
         <Table
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={stuList}
+          dataSource={EtiquetteList}
           rowKey={record => record.id}
           scroll={{ x: 1300 }}
           onChange={this.handleStandardTableChange}
-          pagination={{total:stuList.length,showQuickJumper:true, defaultCurrent:1}}
+          pagination={{total:EtiquetteList.length,showQuickJumper:true, defaultCurrent:1}}
         />
       </div>
     );
   }
 }
-export default StudentTable;
+export default EtiquetteCheck;

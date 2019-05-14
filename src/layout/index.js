@@ -99,7 +99,7 @@ class BasicLayout extends Component {
           title={
             <span>
               <Icon type="dashboard" />
-              <span>用户列表</span>
+              <span>班级学生成绩列表</span>
             </span>
           }
         >
@@ -111,6 +111,25 @@ class BasicLayout extends Component {
           </Menu.Item>
           <Menu.Item key="4">
             <Link to="/dashboard/teacher/studentEcharts">学生个人详情分析</Link>
+          </Menu.Item>
+        </SubMenu>
+        <SubMenu
+          key="sub4"
+          title={
+            <span>
+              <Icon type="dashboard" />
+              <span>班级学生日常行为考核</span>
+            </span>
+          }
+        >
+          <Menu.Item key="2">
+            <Link to="/check/teacher/classroomCheck">课堂考核</Link>
+          </Menu.Item>
+          <Menu.Item key="3">
+            <Link to="/check/teacher/breakExerciseCheck">课间操考核</Link>
+          </Menu.Item>
+          <Menu.Item key="4">
+            <Link to="/check/teacher/etiquetteCheck">礼仪规范考核</Link>
           </Menu.Item>
         </SubMenu>
         <SubMenu
