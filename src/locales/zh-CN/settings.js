@@ -1,5 +1,27 @@
 export default {
   'app.settings.menuMap.basic': '基本设置',
+  'app.settings.menuMap.adminSystem': '管理员系统',
+  'app.settings.menuMap.teacherSystem': '教师系统',
+  'app.settings.menuMap.stuSystem': '学生系统',
+
+  'app.settings.menuMap.userList': '用户列表',
+  'app.settings.menuMap.teacherList': '教师列表',
+  'app.settings.menuMap.stuList': '学生列表',
+  'app.settings.menuMap.sendMessage': '消息发布',
+  'app.settings.menuMap.toAll': '全校发布',
+  'app.settings.menuMap.toTeacher': '教师发布',
+  'app.settings.menuMap.toStu': '学生发布',
+
+  'app.settings.menuMap.classCheck': '课堂考核',
+  'app.settings.menuMap.etiquetteCheck': '礼仪规范考核',
+  'app.settings.menuMap.breakExerciseCheck': '课间操考核',
+  'app.settings.menuMap.gradeList': '班级学生成绩列表',
+  'app.settings.menuMap.stuGradeList': '学生成绩列表',
+  'app.settings.menuMap.classEcharts': '班级分析',
+  'app.settings.menuMap.studentEcharts': '学生个人详情分析',
+  'app.settings.menuMap.teaToStu': '班级发布',
+
+
   'app.settings.menuMap.security': '安全设置',
   'app.settings.menuMap.binding': '账号绑定',
   'app.settings.menuMap.notification': '新消息通知',

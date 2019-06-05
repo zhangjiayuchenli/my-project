@@ -187,13 +187,13 @@ class DrawerForm extends Component {
                   })(
                     <Select
                       size={size}
-                      style={{ width: '32%' }}
+                      style={{ width: '40%' }}
                       allowClear={true}
                       showSearch={true}
                     >
-                      <Option value="软嵌152">软嵌152</Option>
+                      <Option value="一年级一班">一年级一班</Option>
                       {/*<Option key="7">软嵌151</Option>*/}
-                      <Option value="软嵌151">软嵌151</Option>
+                      <Option value="一年级二班">一年级二班</Option>
                     </Select>
                   )}
                 </Form.Item>

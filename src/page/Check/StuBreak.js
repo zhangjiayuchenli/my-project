@@ -23,8 +23,8 @@ const rowSelection = {
 
 const provinceData = ['第一学期', '第二学期'];
 const cityData = {
-  第一学期: ['第一周', '第二周', '第三周', '第四周'],
-  第二学期: ['第一周', '第二周', '第三周', '第四周'],
+  第一学期: ['第一周', '第二周', '第三周'],
+  第二学期: ['第一周', '第二周', '第三周'],
 };
 
 @connect(({check})=>({
@@ -55,12 +55,8 @@ class BreakExerciseCheck extends Component {
     });
     const {dispatch}=this.props;
     const {cities,secondCity,province}=this.state;
-    console.log("1111111")
-    console.log(province)
-    console.log(secondCity)
-    console.log("1111111")
     dispatch({
-      type:'check/getBreakExerciseCheck',
+      type:'check/getStuBreak',
       payload:({year:province,week:value})
     })
   }
@@ -70,12 +66,10 @@ class BreakExerciseCheck extends Component {
     const {cities,secondCity}=this.state;
     console.log("zhixing")
     dispatch({
-      type:'check/getBreakExerciseCheck',
+      type:'check/getStuBreak',
       payload:({year:provinceData[0],week:secondCity})
     })
-    dispatch({
-      type: 'check/selectStuIdByTeacherId',
-    })
+
   };
 
   handleStandardTableChange = (pagination) => {
@@ -214,51 +208,11 @@ class BreakExerciseCheck extends Component {
         dataIndex: 'actionStandard',
 
       },
-      {
-        title: 'Action',
-        key: 'action',
-        width: '7%',
-        render: (text, record) => (
-          <span>
-            <a href="javascript:;" onClick={this.props.show.bind(this, record)}>
-              <Icon type="edit" />
-            </a>
-            <Divider type="vertical" />
-            <Popconfirm
-              title="Are you sure？"
-              onConfirm={e => this.onDelete(record)}
-              onCancel={this.cancel}
-              icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
-            >
-              <a href="#">
-                <Icon type="delete" />
-              </a>
-            </Popconfirm>
-          </span>
-        ),
-      },
+
     ];
     return (
       <div>
-        <Button type="primary" onClick={this.props.show}>
-          <Icon type="user-add" />
-          添加
-        </Button>
-        &nbsp;
-        <Button
-          type="danger"
-          onClick={e =>
-            this.onDeleteCheck({
-               list,
-              year: BreakExerciseList.length > 0 ? [BreakExerciseList[0].schoolYear] : null,
-              week: BreakExerciseList.length > 0 ? [BreakExerciseList[0].week] : null,
-            })
-          }
-        >
-          <Icon type="user-delete" />
-          删除
-        </Button>
-        &nbsp;
+
         <Select
           defaultValue={this.state.province}
           style={{ width: 120 }}

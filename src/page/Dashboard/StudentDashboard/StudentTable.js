@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { Table, Divider, Tag, Select } from 'antd';
+import { Table, Select } from 'antd';
 import styles from './StudentTable.less';
 import { connect } from 'dva';
-import moment from '../../Account/Setting/StuSetting/BaseView';
+
 const { Column, ColumnGroup, Colums } = Table;
 const { Option } = Select;
 const mapStateToProps = state => {
   return {
-    stuList: state.student.stuList,
+    stuCourses: state.student.stuCourses,
     id: state.login.id,
   };
 };
@@ -16,7 +16,7 @@ const mapDispatchToProps = dispatch => {
     onSubmit: payload =>
       dispatch({
         type: 'student/getStuAndCourse',
-        payload: payload,
+        payload,
       }),
   };
 };
@@ -28,35 +28,21 @@ const mapDispatchToProps = dispatch => {
   componentDidMount = () => {
     this.props.onSubmit({ year: '1' });
   };
+
   handleChange = value => {
     this.props.onSubmit({ year: value });
   };
+
   render() {
-    const { stuList={}}  = this.props;
-    console.log(stuList)
-    let data = []
-    data.push(stuList)
-    console.log(data)
-    /*let data = [];
-    for (let i in stuList) {
-      let o = {};
-      o[i] = stuList[i];
-      data.push(o)
-    }*/
+    const { stuCourses=[]}  = this.props;
+
 
     const columns = [
       { title: 'stuId', dataIndex: 'id' },
       { title: 'name', dataIndex: 'studentName' },
-      //{title: 'class', dataIndex:'className'},
+      {title: 'class', dataIndex:'className'},
     ];
-    /*let data = [];
-    Object.keys(columns.dataIndex).forEach(dataIndex => {
-      const obj = {};
-      obj[dataIndex] = stuList[dataIndex] || null;
-      console.log(obj)
-    });*/
-    //data.push(stuList);
-    console.log(data);
+
     const columns2 = [
       {
         title: 'physics',
@@ -99,15 +85,15 @@ const mapDispatchToProps = dispatch => {
           pagination={false}
           columns={columns}
           rowKey={record => record.id}
-          dataSource={data}
+          dataSource={stuCourses}
           title={() => '学生成绩'}
         />
-        {/*<Table
+        <Table
           columns={columns2}
-          rowKey={"1"}
-          dataSource={[stuList]}
+          rowKey={record => record.id}
+          dataSource={stuCourses}
           pagination={false}
-        />*/}
+        />
       </div>
     );
   }

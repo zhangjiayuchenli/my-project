@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Layout, Menu, Icon } from 'antd';
+import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import Logo from '../components/Logo';
@@ -24,8 +25,6 @@ class BasicLayout extends Component {
     })
   }
 
-
-
   render() {
     const { children } = this.props;
     /** 管理员模块 */
@@ -33,22 +32,22 @@ class BasicLayout extends Component {
       <Menu theme="dark" mode="inline" defaultSelectedKeys={['2']}>
         <Menu.Item key="1">
           <Icon type="pie-chart" />
-          <span>Helloworld</span>
+          <span><FormattedMessage id="app.settings.menuMap.adminSystem" /></span>
         </Menu.Item>
         <SubMenu
           key="sub1"
           title={
             <span>
               <Icon type="table" />
-              <span>用户列表</span>
+              <span><FormattedMessage id="app.settings.menuMap.userList" /></span>
             </span>
           }
         >
           <Menu.Item key="2">
-            <Link to="/dashboard/admin/teacher">教师列表</Link>
+            <Link to="/dashboard/admin/teacher"><FormattedMessage id="app.settings.menuMap.teacherList" /></Link>
           </Menu.Item>
           <Menu.Item key="3">
-            <Link to="/dashboard/admin/student">学生列表</Link>
+            <Link to="/dashboard/admin/student"><FormattedMessage id="app.settings.menuMap.stuList" /></Link>
           </Menu.Item>
         </SubMenu>
         <SubMenu
@@ -56,18 +55,18 @@ class BasicLayout extends Component {
           title={
             <span>
               <Icon type="message" />
-              <span>消息发布</span>
+              <span><FormattedMessage id="app.settings.menuMap.sendMessage" /></span>
             </span>
           }
         >
           <Menu.Item key="2">
-            <Link to="/comment/admin/all">全校发布</Link>
+            <Link to="/comment/admin/all"><FormattedMessage id="app.settings.menuMap.toAll" /></Link>
           </Menu.Item>
           <Menu.Item key="3">
-            <Link to="/comment/admin/toStu">学生发布</Link>
+            <Link to="/comment/admin/toStu"><FormattedMessage id="app.settings.menuMap.toStu" /></Link>
           </Menu.Item>
           <Menu.Item key="4">
-            <Link to="/comment/admin/toTea">教师发布</Link>
+            <Link to="/comment/admin/toTea"><FormattedMessage id="app.settings.menuMap.toTeacher" /></Link>
           </Menu.Item>
         </SubMenu>
         <SubMenu
@@ -75,15 +74,15 @@ class BasicLayout extends Component {
           title={
             <span>
               <Icon type="user" />
-              <span>个人中心</span>
+              <span><FormattedMessage id="menu.account" /></span>
             </span>
           }
         >
           <Menu.Item key="2">
-            <Link to="/account/center/admin">个人信息</Link>
+            <Link to="/account/center/admin"><FormattedMessage id="menu.account.center" /></Link>
           </Menu.Item>
           <Menu.Item key="3">
-            <Link to="/account/adminSettings">修改信息</Link>
+            <Link to="/account/adminSettings"><FormattedMessage id="menu.account.settings" /></Link>
           </Menu.Item>
         </SubMenu>
       </Menu>
@@ -92,25 +91,19 @@ class BasicLayout extends Component {
       <Menu theme="dark" mode="inline" defaultSelectedKeys={['2']}>
         <Menu.Item key="1">
           <Icon type="pie-chart" />
-          <span>HelloWorld</span>
+          <span><FormattedMessage id="app.settings.menuMap.teacherSystem" /></span>
         </Menu.Item>
         <SubMenu
-          key="sub1"
+          key="sub4"
           title={
             <span>
               <Icon type="dashboard" />
-              <span>班级学生成绩列表</span>
+              <span><FormattedMessage id="app.settings.menuMap.classCheck" /></span>
             </span>
           }
         >
           <Menu.Item key="2">
-            <Link to="/dashboard/teacher/student">学生列表</Link>
-          </Menu.Item>
-          <Menu.Item key="3">
-            <Link to="/dashboard/teacher/classEcharts">班级分析</Link>
-          </Menu.Item>
-          <Menu.Item key="4">
-            <Link to="/dashboard/teacher/studentEcharts">学生个人详情分析</Link>
+            <Link to="/check/teacher/classroomCheck"><FormattedMessage id="app.settings.menuMap.classCheck" /></Link>
           </Menu.Item>
         </SubMenu>
         <SubMenu
@@ -118,18 +111,44 @@ class BasicLayout extends Component {
           title={
             <span>
               <Icon type="dashboard" />
-              <span>班级学生日常行为考核</span>
+              <span><FormattedMessage id="app.settings.menuMap.breakExerciseCheck" /></span>
+            </span>
+          }
+        >
+          <Menu.Item key="3">
+            <Link to="/check/teacher/breakExerciseCheck"><FormattedMessage id="app.settings.menuMap.breakExerciseCheck" /></Link>
+          </Menu.Item>
+        </SubMenu>
+        <SubMenu
+          key="sub4"
+          title={
+            <span>
+              <Icon type="dashboard" />
+              <span><FormattedMessage id="app.settings.menuMap.etiquetteCheck" /></span>
+            </span>
+          }
+        >
+          <Menu.Item key="4">
+            <Link to="/check/teacher/etiquetteCheck"><FormattedMessage id="app.settings.menuMap.etiquetteCheck" /></Link>
+          </Menu.Item>
+        </SubMenu>
+        <SubMenu
+          key="sub1"
+          title={
+            <span>
+              <Icon type="dashboard" />
+              <span><FormattedMessage id="app.settings.menuMap.gradeList" /></span>
             </span>
           }
         >
           <Menu.Item key="2">
-            <Link to="/check/teacher/classroomCheck">课堂考核</Link>
+            <Link to="/dashboard/teacher/student"><FormattedMessage id="app.settings.menuMap.stuGradeList" /></Link>
           </Menu.Item>
           <Menu.Item key="3">
-            <Link to="/check/teacher/breakExerciseCheck">课间操考核</Link>
+            <Link to="/dashboard/teacher/classEcharts"><FormattedMessage id="app.settings.menuMap.classEcharts" /></Link>
           </Menu.Item>
           <Menu.Item key="4">
-            <Link to="/check/teacher/etiquetteCheck">礼仪规范考核</Link>
+            <Link to="/dashboard/teacher/studentEcharts"><FormattedMessage id="app.settings.menuMap.studentEcharts" /></Link>
           </Menu.Item>
         </SubMenu>
         <SubMenu
@@ -137,12 +156,12 @@ class BasicLayout extends Component {
           title={
             <span>
               <Icon type="message" />
-              <span>消息发布</span>
+              <span><FormattedMessage id="app.settings.menuMap.sendMessage" /></span>
             </span>
           }
         >
           <Menu.Item key="3">
-            <Link to="/comment/admin/toStu">班级发布</Link>
+            <Link to="/comment/admin/toStu"><FormattedMessage id="app.settings.menuMap.teaToStu" /></Link>
           </Menu.Item>
         </SubMenu>
         <SubMenu
@@ -150,15 +169,15 @@ class BasicLayout extends Component {
           title={
             <span>
               <Icon type="user" />
-              <span>个人中心</span>
+              <span><FormattedMessage id="menu.account" /></span>
             </span>
           }
         >
           <Menu.Item key="2">
-            <Link to="/account/center/teacher">个人信息</Link>
+            <Link to="/account/center/teacher"><FormattedMessage id="menu.account.center" /></Link>
           </Menu.Item>
           <Menu.Item key="4">
-            <Link to="/account/setting">修改信息</Link>
+            <Link to="/account/setting"><FormattedMessage id="menu.account.settings" /></Link>
           </Menu.Item>
         </SubMenu>
       </Menu>
@@ -167,26 +186,55 @@ class BasicLayout extends Component {
       <Menu theme="dark" mode="inline" defaultSelectedKeys={['2']}>
         <Menu.Item key="1">
           <Icon type="pie-chart" />
-          <span>HelloWorld</span>
+          <span>学生系统</span>
         </Menu.Item>
         <SubMenu
           key="sub1"
           title={
             <span>
               <Icon type="dashboard" />
-              <span>个人查询</span>
+              <span>考试规则查询</span>
             </span>
           }
         >
           <Menu.Item key="3">
             <Link to="/dashboard/student/query">考试规则查询</Link>
           </Menu.Item>
+        </SubMenu>
+        <SubMenu
+          key="sub2"
+          title={
+            <span>
+              <Icon type="dashboard" />
+              <span>日常评分查询</span>
+            </span>
+          }
+        >
+          <Menu.Item key="1">
+            <Link to="/check/stu/classroomCheck">个人课堂表现</Link>
+          </Menu.Item>
+          <Menu.Item key="2">
+            <Link to="/check/stu/breakExerciseCheck">个人课间操表现</Link>
+          </Menu.Item>
+          <Menu.Item key="3">
+            <Link to="/check/stu/etiquetteCheck">个人礼仪规范</Link>
+          </Menu.Item>
+        </SubMenu>
+        <SubMenu
+          key="sub3"
+          title={
+            <span>
+              <Icon type="dashboard" />
+              <span>个人成绩查询</span>
+            </span>
+          }
+        >
           <Menu.Item key="4">
             <Link to="/dashboard/student/studentInfo">个人成绩详情分析</Link>
           </Menu.Item>
         </SubMenu>
         <SubMenu
-          key="sub2"
+          key="sub4"
           title={
             <span>
               <Icon type="user" />

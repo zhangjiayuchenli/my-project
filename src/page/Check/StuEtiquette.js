@@ -23,15 +23,15 @@ const rowSelection = {
 
 const provinceData = ['第一学期', '第二学期'];
 const cityData = {
-  第一学期: ['第一周', '第二周', '第三周', '第四周'],
-  第二学期: ['第一周', '第二周', '第三周', '第四周'],
+  第一学期: ['第一周', '第二周', '第三周'],
+  第二学期: ['第一周', '第二周', '第三周'],
 };
 
 @connect(({check})=>({
   check,
-  BreakExerciseList:check.BreakExerciseList
+  EtiquetteList:check.EtiquetteList
 }))
-class BreakExerciseCheck extends Component {
+class EtiquetteCheck extends Component {
   state = {
     searchText: '',
     cities: cityData[provinceData[0]],
@@ -55,12 +55,8 @@ class BreakExerciseCheck extends Component {
     });
     const {dispatch}=this.props;
     const {cities,secondCity,province}=this.state;
-    console.log("1111111")
-    console.log(province)
-    console.log(secondCity)
-    console.log("1111111")
     dispatch({
-      type:'check/getBreakExerciseCheck',
+      type:'check/getStuEtiquette',
       payload:({year:province,week:value})
     })
   }
@@ -68,13 +64,9 @@ class BreakExerciseCheck extends Component {
   componentWillMount = () => {
     const {dispatch}=this.props;
     const {cities,secondCity}=this.state;
-    console.log("zhixing")
     dispatch({
-      type:'check/getBreakExerciseCheck',
+      type:'check/getStuEtiquette',
       payload:({year:provinceData[0],week:secondCity})
-    })
-    dispatch({
-      type: 'check/selectStuIdByTeacherId',
     })
   };
 
@@ -153,7 +145,7 @@ class BreakExerciseCheck extends Component {
   onDelete=payload=>{
     const { dispatch } = this.props;
     dispatch({
-      type:'check/deleteBreakExercise',
+      type:'check/deleteEtiquette',
       payload
     })
   }
@@ -161,16 +153,16 @@ class BreakExerciseCheck extends Component {
   onDeleteCheck= payload =>{
     const { dispatch } = this.props;
     dispatch({
-      type: 'check/deleteBreakExerciseByCheck',
+      type: 'check/deleteEtiquetteByCheck',
       payload
     })
   }
 
   render() {
 
-    const {  BreakExerciseList = [] } = this.props;
+    const {  EtiquetteList = [] } = this.props;
     const { cities } = this.state;
-    console.log(BreakExerciseList)
+    console.log(EtiquetteList)
     const columns = [
       {
         title: 'stuId',
@@ -191,74 +183,33 @@ class BreakExerciseCheck extends Component {
         ...this.getColumnSearchProps('createTime'),
       },
       {
-        title: '眼保健操',
-        dataIndex: 'eyeExercises',
+        title: '尊敬师长爱护同学',
+        dataIndex: 'respect',
       },
       {
-        title: '操前活动',
-        dataIndex: 'preExercises',
+        title: '升旗认真端正',
+        dataIndex: 'flag',
 
       },
       {
-        title: '准时到达',
-        dataIndex: 'later',
+        title: '衣着整洁讲卫生',
+        dataIndex: 'health',
 
       },
       {
-        title: '队列整齐',
-        dataIndex: 'queueNeat',
+        title: '文明礼貌用语',
+        dataIndex: 'civilized',
 
       },
       {
-        title: '动作标准',
-        dataIndex: 'actionStandard',
+        title: '守学校纪律',
+        dataIndex: 'keepRules',
 
       },
-      {
-        title: 'Action',
-        key: 'action',
-        width: '7%',
-        render: (text, record) => (
-          <span>
-            <a href="javascript:;" onClick={this.props.show.bind(this, record)}>
-              <Icon type="edit" />
-            </a>
-            <Divider type="vertical" />
-            <Popconfirm
-              title="Are you sure？"
-              onConfirm={e => this.onDelete(record)}
-              onCancel={this.cancel}
-              icon={<Icon type="question-circle-o" style={{ color: 'red' }} />}
-            >
-              <a href="#">
-                <Icon type="delete" />
-              </a>
-            </Popconfirm>
-          </span>
-        ),
-      },
+
     ];
     return (
       <div>
-        <Button type="primary" onClick={this.props.show}>
-          <Icon type="user-add" />
-          添加
-        </Button>
-        &nbsp;
-        <Button
-          type="danger"
-          onClick={e =>
-            this.onDeleteCheck({
-               list,
-              year: BreakExerciseList.length > 0 ? [BreakExerciseList[0].schoolYear] : null,
-              week: BreakExerciseList.length > 0 ? [BreakExerciseList[0].week] : null,
-            })
-          }
-        >
-          <Icon type="user-delete" />
-          删除
-        </Button>
-        &nbsp;
         <Select
           defaultValue={this.state.province}
           style={{ width: 120 }}
@@ -276,14 +227,14 @@ class BreakExerciseCheck extends Component {
         <Table
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={BreakExerciseList}
+          dataSource={EtiquetteList}
           rowKey={record => record.id}
           scroll={{ x: 1300 }}
           onChange={this.handleStandardTableChange}
-          pagination={{total:BreakExerciseList.length,showQuickJumper:true, defaultCurrent:1}}
+          pagination={{total:EtiquetteList.length,showQuickJumper:true, defaultCurrent:1}}
         />
       </div>
     );
   }
 }
-export default BreakExerciseCheck
+export default EtiquetteCheck;

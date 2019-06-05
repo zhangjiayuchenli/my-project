@@ -2,18 +2,18 @@ import React, { Component } from 'react';
 import { Card, Divider, Tag, Upload, message, Button, Icon, Row, Col ,Avatar} from 'antd';
 import { connect } from 'dva';
 import styles from './StudentCenter.less';
-const mapStateToProps = state => {
-  return {
-    user: state.login.user,
-  };
-};
+
 const style = {
   width: '400px',
   margin: '40px',
   boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
   border: '1px solid #e8e8e8',
 };
-@connect(mapStateToProps)
+@connect(({global})=>({
+    global,
+    currentUser:global.currentUser
+  })
+)
 export default class studentCenter extends Component {
   state = {
     studentAvatar: JSON.parse(sessionStorage.getItem('user')).studentAvatar,
@@ -22,13 +22,18 @@ export default class studentCenter extends Component {
   };
 
   render() {
+    const {currentUser}=this.props
     return (
       <Row gutter={24}>
         <Col span={24}>
           <Card bordered={false} style={{ marginBottom: 24 }}>
             <div className={styles.main}>
               <div className={styles.avatarHolder}>
-                <Avatar src={this.state.studentAvatar}/>
+                <img
+                  alt=""
+                  src={currentUser.studentAvatar}
+                  style={{ width: '100px', height: '100px', borderRadius: '32px' }}
+                />
                 <div className={styles.name}>{this.state.studentName}</div>
                 <div>好好学习，天天向上</div>
               </div>
@@ -39,7 +44,7 @@ export default class studentCenter extends Component {
                 </p>
                 <p>
                   <i className={styles.group} />
-                  蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED
+                  璧山中学
                 </p>
                 <p>
                   <i className={styles.address} />

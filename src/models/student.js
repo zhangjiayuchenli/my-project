@@ -13,7 +13,7 @@ export default {
       return { ...state, ...{ scoresList: payload } };
     },
     getStuAndCourses(state, { payload }) {
-      return { ...state, ...{ stuList: payload } };
+      return { ...state, ...{ stuCourses: payload } };
     },
     getPasswordCaptcha(state, { payload }) {
       return {
@@ -69,6 +69,7 @@ export default {
     *getStuAndCourse({ payload }, { call, put }) {
       const url = `/student/selectCourseByYears?year=${  payload.year}`;
       const { res } = yield call(studentService.get, url);
+      console.log(res)
       yield put({ type: 'getStuAndCourses', payload: res });
     },
   },

@@ -37,7 +37,7 @@ export default () => {
           }
         />
         <Tag color="magenta">管理员</Tag>
-        <Upload
+        {/*<Upload
           name="file"
           action="/dev/teacher/uploadAvatar"
           onChange={info => {
@@ -55,7 +55,7 @@ export default () => {
           <Button>
             <Icon type="upload" /> 上传头像
           </Button>
-        </Upload>
+        </Upload>*/}
       </div>
       <Divider />
       <div>

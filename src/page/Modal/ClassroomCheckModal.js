@@ -61,6 +61,7 @@ class ClassroomCheckModal extends Component {
         const {dispatch,StuIdList,ClassroomCreatetimeList}=this.props;
         const { id } = this.state.record;
         const { stuId, creatTime } = values;
+        console.log(creatTime.format("YYYY-MM-DD"))
         if (!id) {
           // 判断学号是否为本班学生学号
           // 判断学号是否为本班学生学号

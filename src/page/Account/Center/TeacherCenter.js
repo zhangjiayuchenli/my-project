@@ -41,7 +41,7 @@ class TeacherCenter extends Component {
                 </p>
                 <p>
                   <i className={styles.group} />
-                  蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED
+                  璧山中学
                 </p>
                 <p>
                   <i className={styles.address} />

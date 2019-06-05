@@ -71,6 +71,28 @@ export default {
       console.log(res)
       yield put({type:'getBreakExerciseList',payload:res})
     },
+    // 学生得到课间操考核情况
+    *getStuBreak({payload},{call,put})
+    {
+      const url=`/check/getStuBreak?year=${  payload.year  }&week=${  payload.week}`;
+      const {res}=yield call(teacherService.get,url);
+      console.log(res)
+      yield put({type:'getBreakExerciseList',payload:res})
+    },
+    *getStuEtiquette({payload},{call,put})
+    {
+      const url=`/check/getStuEtiquette?year=${  payload.year  }&week=${  payload.week}`;
+      const {res}=yield call(teacherService.get,url);
+      console.log(res)
+      yield put({type:'getEtiquetteList',payload:res})
+    },
+    *getStuClass({payload},{call,put})
+    {
+      const url=`/check/getStuClass?year=${  payload.year  }&week=${  payload.week}`;
+      const {res}=yield call(teacherService.get,url);
+      console.log(res)
+      yield put({type:'getClassroomList',payload:res})
+    },
     // 教师得到本班礼仪行为规范考核情况
     *getEtiquetteCheck({payload},{call,put})
     {
@@ -111,6 +133,7 @@ export default {
       console.log(payload)
       const url = `/check/getClassroomStuOfCreatetime?studentId=${  payload.studentId}`;
       const { res } = yield call(teacherService.get, url);
+      console.log(res)
       yield put({ type: 'getClassroomCreatetime', payload: res });
     },
     // 获取本班学生ID

@@ -186,14 +186,14 @@ class NormalLoginForm extends Component {
             </Form.Item>
 
             <Form.Item>
-              {getFieldDecorator('remember', {
+              {/*{getFieldDecorator('remember', {
                 valuePropName: 'checked',
                 initialValue: true,
               })(<Checkbox style={{float:"left"}}>
                 {
                   formatMessage({ id: "app.login.remember-me" }, {})
                 }
-                 </Checkbox>)}
+                 </Checkbox>)}*/}
               <a className={styles['login-form-forgot']} href="" onClick={this.handleClick}>
                 {
                   formatMessage({ id: "app.login.forgot-password" }, {})
